@@ -2,7 +2,7 @@ import React from "react";
 import { useMoralis } from "react-moralis";
 import { Button } from "@chakra-ui/react";
 function MetaMaskAuthentication() {
-  const { useAuthenticate, authenticate, isAuthenticating } = useMoralis();
+  const { authenticate, isAuthenticating } = useMoralis();
   return (
     <div>
       <Button isLoading={isAuthenticating} onClick={() => authenticate()}>

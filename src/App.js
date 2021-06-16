@@ -1,47 +1,30 @@
 import React from "react";
-import {
-  Button,
-  Container,
-  Heading,
-  AlertIcon,
-  Alert,
-  Box,
-  AlertTitle,
-  AlertDescription,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Container, Heading, Stack, Text, Image } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
 import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn";
+import LogOut from "./components/LogOut";
 import MetaMaskAuthentication from "./components/MetaMaskAuthentication";
+import AuthError from "./components/AuthError";
 
 function App() {
-  const { isAuthenticated, authError, logout } = useMoralis();
+  const { isAuthenticated, authError } = useMoralis();
+
   if (isAuthenticated) {
-    return (
-      <Container>
-        <Heading>Welcome to Meme of the Day</Heading>
-        <Button onClick={() => logout()}>Logout</Button>
-      </Container>
-    );
+    return <LogOut />;
   }
+
   return (
     <div className="App">
       <Container>
-        <Heading mb={6}>Meme of the Day Login</Heading>
+        <Heading mb={6}>
+          <Image
+            src="https://dashboard-assets.dappradar.com/document/5158/memeoftheday-dapp-collectibles-matic-logo-166x166_e565ca917e493c8e5c6196776a56384c.png"
+            alt="LogoMOTD"
+          />
+        </Heading>
         <Stack spacing={6}>
-          {authError && (
-            <Alert status="error">
-              <AlertIcon />
-              <Box flex="1">
-                <AlertTitle>Authentication has failed!</AlertTitle>
-                <AlertDescription display="block">
-                  {authError.message}
-                </AlertDescription>
-              </Box>
-            </Alert>
-          )}
+          {authError && <AuthError />}
           <MetaMaskAuthentication />
           <Text textAlign="center">
             <em>or</em>
