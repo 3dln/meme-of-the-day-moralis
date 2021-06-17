@@ -6,12 +6,21 @@ import LogIn from "./components/LogIn";
 import LogOut from "./components/LogOut";
 import MetaMaskAuthentication from "./components/MetaMaskAuthentication";
 import AuthError from "./components/AuthError";
+import ResetPassword from "./components/ResetPassword";
+import GreetUser from "./components/GreetUser";
 
 function App() {
   const { isAuthenticated, authError } = useMoralis();
 
   if (isAuthenticated) {
-    return <LogOut />;
+    return (
+      <Container>
+        <Stack spacing={6}>
+          <GreetUser />
+          <LogOut />
+        </Stack>
+      </Container>
+    );
   }
 
   return (
@@ -34,6 +43,7 @@ function App() {
             <em>or</em>
           </Text>
           <LogIn />
+          <ResetPassword />
         </Stack>
       </Container>
     </div>
