@@ -7,7 +7,7 @@ const ResetPassword = () => {
   return (
     <Stack spacing={3}>
       <Input
-        required
+        isRequired
         placeholder="E-Mail"
         value={email}
         onChange={(event) => setEmail(event.target.value)}

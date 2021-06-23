@@ -10,19 +10,19 @@ const SignUp = () => {
   return (
     <Stack spacing={3}>
       <Input
-        required
+        isRequired
         placeholder="Username"
         value={userName}
         onChange={(event) => setUsername(event.target.value)}
       />
       <Input
-        required
+        isRequired
         placeholder="E-Mail"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
       />
       <Input
-        required
+        isRequired
         type="password"
         placeholder="Password"
         value={password}

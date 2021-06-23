@@ -1,22 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Heading, Stack, Text, Image } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
 import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn";
 import LogOut from "./components/LogOut";
-import MetaMaskAuthentication from "./components/MetaMaskAuthentication";
 import AuthError from "./components/AuthError";
 import ResetPassword from "./components/ResetPassword";
+import MetaMaskAuthentication from "./components/MetaMaskAuthentication";
 import GreetUser from "./components/GreetUser";
+import ConnectWallet from "./components/ConnectWallet";
+import Moralis from "moralis/lib/browser/Parse";
 
 function App() {
   const { isAuthenticated, authError } = useMoralis();
+  const [user, setUser] = useState();
+
+  const getCurrentUser = async () => {
+    const currentUser = Moralis.User.current();
+    if (currentUser) {
+      setUser(currentUser);
+      console.log(currentUser.attributes.accounts);
+    }
+  };
 
   if (isAuthenticated) {
     return (
       <Container>
         <Stack spacing={6}>
           <GreetUser />
+          <ConnectWallet getCurrentUser={getCurrentUser} user={user} />
           <LogOut />
         </Stack>
       </Container>
@@ -34,10 +46,10 @@ function App() {
         </Heading>
         <Stack spacing={6}>
           {authError && <AuthError />}
-          <MetaMaskAuthentication />
+          {/* <MetaMaskAuthentication />
           <Text textAlign="center">
             <em>or</em>
-          </Text>
+          </Text> */}
           <SignUp />
           <Text textAlign="center">
             <em>or</em>

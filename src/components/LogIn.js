@@ -20,7 +20,13 @@ const LogIn = () => {
         value={password}
         onChange={(event) => setPassword(event.target.value)}
       />
-      <Button onClick={() => login(userName, password)}>Log In</Button>
+      <Button
+        onClick={() => {
+          login(userName, password);
+        }}
+      >
+        Log In
+      </Button>
     </Stack>
   );
 };
