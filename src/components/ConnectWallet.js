@@ -11,7 +11,7 @@ import {
 
 function ConnectWallet({ getCurrentUser }) {
   const [accountChanged, setAccountChanged] = useState(false);
-  const [isConneced, setIsconced] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   //Checks if account is already linked to currentUser
   const checkIfLinked = async () => {
@@ -31,6 +31,7 @@ function ConnectWallet({ getCurrentUser }) {
         console.log(isLinked);
         await Moralis.Web3.enable();
         setAccountChanged(false);
+        setIsConnected(true);
       }
       if (isLinked === false) {
         if (
@@ -38,8 +39,10 @@ function ConnectWallet({ getCurrentUser }) {
             "Would you like to link this account to your user profile?"
           )
         ) {
+          await Moralis.Web3.enable();
           await Moralis.Web3.link(window.ethereum.selectedAddress);
           setAccountChanged(false);
+          setIsConnected(true);
         }
       }
     }
@@ -49,11 +52,12 @@ function ConnectWallet({ getCurrentUser }) {
   Moralis.Web3.on("accountsChanged", async (accounts) => {
     console.log("renders");
     setAccountChanged(true);
+    setIsConnected(false);
   });
 
   return (
     <div>
-      {isConnected === true && (
+      {isConnected === false && (
         <Button onClick={connectUserWallet}>Connect your Wallet</Button>
       )}
 
