@@ -17,10 +17,12 @@ function ConnectWallet({ setCurrentUser }) {
   //Checks if account is already linked to currentUser
   const checkIfLinked = async () => {
     const currentUser = Moralis.User.current();
-    const accountLinked = currentUser.attributes.accounts.includes(
-      window.ethereum.selectedAddress
-    );
-    return accountLinked;
+    if (currentUser.attributes.accounts) {
+      const accountLinked = currentUser.attributes.accounts.includes(
+        window.ethereum.selectedAddress
+      );
+      return accountLinked;
+    } else return false;
   };
 
   //Connects User Wallet
