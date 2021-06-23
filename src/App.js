@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { Container, Heading, Stack, Text, Image } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Heading,
+  Stack,
+  Text,
+  Image,
+  Button,
+} from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
 import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn";
@@ -15,6 +22,16 @@ import Moralis from "moralis/lib/browser/Parse";
 function App() {
   const { isAuthenticated, authError } = useMoralis();
   const [user, setUser] = useState();
+  const [hasWeb3, setHasWeb3] = useState();
+
+  useEffect(() => {
+    if (window.ethereum) {
+      setHasWeb3(true);
+    }
+    if (!window.ethereum) {
+      setHasWeb3(false);
+    }
+  }, []);
 
   //Fetches and sets current User from Moralis session
   const setCurrentUser = async () => {
@@ -30,7 +47,14 @@ function App() {
       <Container>
         <Stack spacing={6}>
           <GreetUser />
-          <ConnectWallet setCurrentUser={setCurrentUser} user={user} />
+          {hasWeb3 === true ? (
+            <ConnectWallet setCurrentUser={setCurrentUser} user={user} />
+          ) : (
+            <Button onClick={() => window.open("https://metamask.io")}>
+              Get MetaMask to use Meme of the Day to it's full extend!
+            </Button>
+          )}
+
           {user ? (
             <UploadComponent user={user} />
           ) : (
