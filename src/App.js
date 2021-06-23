@@ -30,7 +30,7 @@ function App() {
         <Stack spacing={6}>
           <GreetUser />
           <ConnectWallet setCurrentUser={setCurrentUser} user={user} />
-          <UploadComponent />
+          <UploadComponent user={user} />
           <LogOut />
         </Stack>
       </Container>
