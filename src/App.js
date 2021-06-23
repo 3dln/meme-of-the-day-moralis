@@ -8,6 +8,7 @@ import AuthError from "./components/AuthError";
 import ResetPassword from "./components/ResetPassword";
 import UploadComponent from "./components/UploadComponent";
 import GreetUser from "./components/GreetUser";
+import ShowMemes from "./components/ShowMemes";
 import ConnectWallet from "./components/ConnectWallet";
 import Moralis from "moralis/lib/browser/Parse";
 
@@ -30,7 +31,12 @@ function App() {
         <Stack spacing={6}>
           <GreetUser />
           <ConnectWallet setCurrentUser={setCurrentUser} user={user} />
-          <UploadComponent user={user} />
+          {user ? (
+            <UploadComponent user={user} />
+          ) : (
+            "Please connect your wallet to create Memes"
+          )}
+          {user && <ShowMemes user={user} />}
           <LogOut />
         </Stack>
       </Container>
