@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { useMoralis } from "react-moralis";
 import { Moralis } from "moralis";
 import { Box, Button, Input, Textarea } from "@chakra-ui/react";
-import { createDomMotionComponent } from "framer-motion";
 
 function UploadComponent({ user }) {
   const [name, setName] = useState();
@@ -14,7 +12,6 @@ function UploadComponent({ user }) {
     await MoralisFile.saveIPFS();
     const ipfs = await MoralisFile.ipfs();
     const hash = await MoralisFile.hash();
-    //const name = await MoralisFile.name();
     console.log("Meme created. Fetching data...");
 
     if (ipfs && hash) {

@@ -15,6 +15,7 @@ function ShowMemes({ user }) {
     fetchUsersMemes();
   }, []);
 
+  //fetches Memes of Current User
   const fetchUsersMemes = async () => {
     const query = new Moralis.Query("Memes");
     query.equalTo("owner", user);

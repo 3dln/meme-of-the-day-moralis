@@ -38,8 +38,9 @@ function App() {
     const currentUser = Moralis.User.current();
     if (currentUser) {
       setUser(currentUser);
-      console.log(currentUser.attributes.accounts);
+      console.log("CU", currentUser.attributes.accounts);
     }
+    return currentUser;
   };
 
   if (isAuthenticated) {
@@ -55,7 +56,7 @@ function App() {
             </Button>
           )}
 
-          {user ? (
+          {user !== undefined ? (
             <UploadComponent user={user} />
           ) : (
             "Please connect your wallet to create Memes"

@@ -9,7 +9,7 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
-function ConnectWallet({ setCurrentUser }) {
+function ConnectWallet({ setCurrentUser, user }) {
   const [accountChanged, setAccountChanged] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [authIsUsed, setAuthIsUsed] = useState(false);
@@ -17,16 +17,22 @@ function ConnectWallet({ setCurrentUser }) {
   //Checks if account is already linked to currentUser
   const checkIfLinked = async () => {
     const currentUser = Moralis.User.current();
-    const accountLinked = currentUser.attributes.accounts.includes(
-      window.ethereum.selectedAddress
-    );
-    return accountLinked;
+    const accounts = await currentUser.attributes.accounts;
+    let accountLinked;
+    if (accounts !== undefined) {
+      return (accountLinked = accounts.includes(
+        window.ethereum.selectedAddress
+      ));
+    } else {
+      accountLinked = false;
+      return accountLinked;
+    }
   };
 
   //Connects User Wallet
   const connectUserWallet = async () => {
-    const isLinked = await checkIfLinked();
-    console.log(isLinked);
+    var isLinked = await checkIfLinked();
+    console.log("IL", isLinked);
     if (Moralis.Web3) {
       try {
         if (isLinked === true) {
