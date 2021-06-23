@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Moralis } from "moralis";
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Image, Text, Button } from "@chakra-ui/react";
 
 function ShowMemes({ user }) {
   const [url, setUrl] = useState();
@@ -62,6 +62,7 @@ function ShowMemes({ user }) {
         <strong>Votes received: </strong>
         {votecount && votecount}
       </Text>
+      <Button onClick={() => fetchUsersMemes()}>Refresh Memes</Button>
     </Box>
   );
 }

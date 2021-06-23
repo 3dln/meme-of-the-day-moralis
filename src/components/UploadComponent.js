@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Moralis } from "moralis";
-import { Box, Button, Input, Textarea } from "@chakra-ui/react";
+import { Box, Button, Input, Textarea, BeatLoader } from "@chakra-ui/react";
 
 function UploadComponent({ user }) {
   const [name, setName] = useState();
   const [file, setFile] = useState();
   const [description, setDescription] = useState();
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleUpload = async () => {
+    setIsUploading(true);
     const MoralisFile = new Moralis.File(file.name, file);
     await MoralisFile.saveIPFS();
     const ipfs = await MoralisFile.ipfs();
@@ -26,6 +28,8 @@ function UploadComponent({ user }) {
       newMeme.set("votes:", "0");
       await newMeme.save();
 
+      setIsUploading(false);
+
       const query = new Moralis.Query("Memes");
       query.equalTo("owner", user);
       query.find().then(([meme]) => {
@@ -39,6 +43,7 @@ function UploadComponent({ user }) {
         console.log("Votecount of Meme", meme.attributes.votes);
       });
     }
+    setIsUploading(false);
   };
 
   return (
@@ -60,7 +65,17 @@ function UploadComponent({ user }) {
           setFile(e.target.files[0]);
         }}
       ></Input>
+
       <Button onClick={handleUpload}>Create Meme</Button>
+
+      {/* {isUploading === true && (
+        <Button
+          isLoading
+          loadingText="...creating Meme"
+          colorScheme="blue"
+          spinner={<BeatLoader size={8} color="white" />}
+        ></Button>
+      )} */}
     </Box>
   );
 }
