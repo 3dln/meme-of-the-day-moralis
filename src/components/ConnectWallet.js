@@ -9,9 +9,10 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
-function ConnectWallet({ getCurrentUser }) {
+function ConnectWallet({ setCurrentUser }) {
   const [accountChanged, setAccountChanged] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [authIsUsed, setAuthIsUsed] = useState(false);
 
   //Checks if account is already linked to currentUser
   const checkIfLinked = async () => {
@@ -27,23 +28,28 @@ function ConnectWallet({ getCurrentUser }) {
     const isLinked = await checkIfLinked();
     console.log(isLinked);
     if (Moralis.Web3) {
-      if (isLinked === true) {
-        console.log(isLinked);
-        await Moralis.Web3.enable();
-        setAccountChanged(false);
-        setIsConnected(true);
-      }
-      if (isLinked === false) {
-        if (
-          window.confirm(
-            "Would you like to link this account to your user profile?"
-          )
-        ) {
+      try {
+        if (isLinked === true) {
+          console.log(isLinked);
           await Moralis.Web3.enable();
-          await Moralis.Web3.link(window.ethereum.selectedAddress);
+          setCurrentUser();
           setAccountChanged(false);
           setIsConnected(true);
         }
+        if (isLinked === false) {
+          if (
+            window.confirm(
+              "Would you like to link this account to your user profile?"
+            )
+          ) {
+            await Moralis.Web3.enable();
+            await Moralis.Web3.link(window.ethereum.selectedAddress);
+            setAccountChanged(false);
+            setIsConnected(true);
+          }
+        }
+      } catch (error) {
+        setAuthIsUsed(true);
       }
     }
   };
@@ -60,8 +66,6 @@ function ConnectWallet({ getCurrentUser }) {
       {isConnected === false && (
         <Button onClick={connectUserWallet}>Connect your Wallet</Button>
       )}
-
-      <Button onClick={getCurrentUser}>Get Current User</Button>
       {accountChanged && (
         <Alert status="error">
           <AlertIcon />
@@ -69,6 +73,26 @@ function ConnectWallet({ getCurrentUser }) {
           <AlertDescription>Please connect your wallet again!</AlertDescription>
           <CloseButton
             onClick={() => setAccountChanged(false)}
+            position="absolute"
+            right="8px"
+            top="8px"
+          />
+        </Alert>
+      )}
+      {authIsUsed === true && (
+        <Alert status="error">
+          <AlertIcon />
+          <AlertTitle mr={2}>This Auth is already in use!</AlertTitle>
+          <AlertDescription>
+            This account is already linked to another user account! Please
+            connect with another address. For further questions, please reach
+            out to Meme Of The Day Support!
+          </AlertDescription>
+          <CloseButton
+            onClick={() => {
+              setAccountChanged(false);
+              setAuthIsUsed(false);
+            }}
             position="absolute"
             right="8px"
             top="8px"

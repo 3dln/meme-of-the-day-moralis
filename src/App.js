@@ -6,7 +6,7 @@ import LogIn from "./components/LogIn";
 import LogOut from "./components/LogOut";
 import AuthError from "./components/AuthError";
 import ResetPassword from "./components/ResetPassword";
-import MetaMaskAuthentication from "./components/MetaMaskAuthentication";
+import UploadComponent from "./components/UploadComponent";
 import GreetUser from "./components/GreetUser";
 import ConnectWallet from "./components/ConnectWallet";
 import Moralis from "moralis/lib/browser/Parse";
@@ -15,7 +15,8 @@ function App() {
   const { isAuthenticated, authError } = useMoralis();
   const [user, setUser] = useState();
 
-  const getCurrentUser = async () => {
+  //Fetches and sets current User from Moralis session
+  const setCurrentUser = async () => {
     const currentUser = Moralis.User.current();
     if (currentUser) {
       setUser(currentUser);
@@ -28,7 +29,8 @@ function App() {
       <Container>
         <Stack spacing={6}>
           <GreetUser />
-          <ConnectWallet getCurrentUser={getCurrentUser} user={user} />
+          <ConnectWallet setCurrentUser={setCurrentUser} user={user} />
+          <UploadComponent />
           <LogOut />
         </Stack>
       </Container>
