@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { Box, Image, Text, Heading, Stack } from "@chakra-ui/react";
+import React, { useEffect, updateState } from "react";
+import { Box, Image, Text, Heading, Stack, Button } from "@chakra-ui/react";
+import { Moralis } from "moralis";
 
 function ShowMemes({ results, fetchUsersMemes }) {
   const memes = results.map((meme, i) => (
@@ -32,6 +33,17 @@ function ShowMemes({ results, fetchUsersMemes }) {
         <strong>Votes: </strong>
         {meme.attributes.votes}
       </Text>
+      <Button
+        onClick={async () => {
+          const Memes = Moralis.Object.extend("Memes");
+          const query = new Moralis.Query(Memes);
+          const toDelete = await query.get(meme.id);
+          await toDelete.destroy();
+          window.location.reload();
+        }}
+      >
+        Delete Meme
+      </Button>
     </Box>
   ));
 

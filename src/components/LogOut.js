@@ -10,7 +10,7 @@ function LogOut() {
         logout();
         setTimeout(() => {
           window.location.reload();
-        }, 2000);
+        }, 100);
       }}
     >
       Logout
