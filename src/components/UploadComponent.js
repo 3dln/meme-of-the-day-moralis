@@ -37,7 +37,7 @@ function UploadComponent({ user, fetchUsersMemes }) {
       query.find().then(([meme]) => {
         console.log("Meme Item from Moralis", meme);
         console.log("Meme Name", meme.attributes.name);
-        console.log("ETHAddress of MemeOwner", meme.attributes.address);
+        console.log("ETHAddress of MemeOwner", window.ethereum.selectedAddress);
         console.log("userName of MemeOwner", meme.attributes.owner);
         console.log("IPFS of Meme", meme.attributes.ipfs);
         console.log("IPFSHash of Meme", meme.attributes.hash);
