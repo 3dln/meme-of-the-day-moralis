@@ -32,11 +32,11 @@ function ConnectWallet({ setCurrentUser, user }) {
   //Connects User Wallet
   const connectUserWallet = async () => {
     var isLinked = await checkIfLinked();
-    console.log("IL", isLinked);
+    //  console.log("IL", isLinked);
     if (Moralis.Web3) {
       try {
         if (isLinked === true) {
-          console.log(isLinked);
+          // console.log(isLinked);
           await Moralis.Web3.enable();
           setCurrentUser();
           setAccountChanged(false);
@@ -62,7 +62,7 @@ function ConnectWallet({ setCurrentUser, user }) {
 
   //Listens for account Changes and asks if user want to link address if not already linked
   Moralis.Web3.on("accountsChanged", async (accounts) => {
-    console.log("renders");
+    console.log("Metamask account changed!");
     setAccountChanged(true);
     setIsConnected(false);
   });

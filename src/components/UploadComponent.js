@@ -14,6 +14,7 @@ function UploadComponent({ user, fetchUsersMemes }) {
     await MoralisFile.saveIPFS();
     const ipfs = await MoralisFile.ipfs();
     const hash = await MoralisFile.hash();
+    var votes = 0;
     console.log("Meme created. Fetching data...");
 
     if (ipfs && hash) {
@@ -25,7 +26,7 @@ function UploadComponent({ user, fetchUsersMemes }) {
       newMeme.set("address", window.ethereum.selectedAddress);
       newMeme.set("name", name);
       newMeme.set("description", description);
-      newMeme.set("votes:", "0");
+      newMeme.set("votes:", votes);
       await newMeme.save();
       await fetchUsersMemes();
       setIsUploading(false);

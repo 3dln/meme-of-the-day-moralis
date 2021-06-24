@@ -56,7 +56,7 @@ function App() {
     // alert("Retrieved " + results.length + " memes.");
     if (results !== undefined && results.length > 0) {
       setResults(results);
-      console.log(results);
+      //console.log(results);
     }
   };
 
@@ -66,7 +66,7 @@ function App() {
     const allMemes = await query.find();
     if (allMemes !== undefined) {
       setAllMemes(allMemes);
-      console.log(allMemes);
+      //console.log(allMemes);
     }
   };
 

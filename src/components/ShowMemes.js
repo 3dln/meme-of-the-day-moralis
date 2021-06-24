@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Image, Text, Heading } from "@chakra-ui/react";
+import { Box, Image, Text, Heading, Stack } from "@chakra-ui/react";
 
 function ShowMemes({ results, fetchUsersMemes }) {
   const memes = results.map((meme, i) => (
@@ -30,7 +30,7 @@ function ShowMemes({ results, fetchUsersMemes }) {
       />
       <Text>
         <strong>Votes: </strong>
-        {}
+        {meme.attributes.votes}
       </Text>
     </Box>
   ));
@@ -42,7 +42,7 @@ function ShowMemes({ results, fetchUsersMemes }) {
   return (
     <>
       <Heading>Your Memes:</Heading>
-      {memes}
+      <Stack spacing={7}>{memes}</Stack>
     </>
   );
 }
