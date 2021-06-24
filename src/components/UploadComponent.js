@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Moralis } from "moralis";
 import { Box, Button, Input, Textarea, BeatLoader } from "@chakra-ui/react";
 
-function UploadComponent({ user }) {
+function UploadComponent({ user, fetchUsersMemes }) {
   const [name, setName] = useState();
   const [file, setFile] = useState();
   const [description, setDescription] = useState();
@@ -27,7 +27,7 @@ function UploadComponent({ user }) {
       newMeme.set("description", description);
       newMeme.set("votes:", "0");
       await newMeme.save();
-
+      await fetchUsersMemes();
       setIsUploading(false);
 
       const query = new Moralis.Query("Memes");

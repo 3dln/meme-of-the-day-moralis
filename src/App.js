@@ -23,6 +23,7 @@ function App() {
   const { isAuthenticated, authError } = useMoralis();
   const [user, setUser] = useState();
   const [hasWeb3, setHasWeb3] = useState();
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -38,9 +39,21 @@ function App() {
     const currentUser = Moralis.User.current();
     if (currentUser) {
       setUser(currentUser);
-      console.log("CU", currentUser.attributes.accounts);
+      //console.log("CU", currentUser.attributes.accounts);
     }
     return currentUser;
+  };
+
+  //fetches Memes of Current User
+  const fetchUsersMemes = async () => {
+    const query = new Moralis.Query("Memes");
+    query.equalTo("owner", Moralis.User.current());
+    const results = await query.find();
+    // alert("Retrieved " + results.length + " memes.");
+    if (results !== undefined && results.length > 0) {
+      setResults(results);
+      console.log(results);
+    }
   };
 
   if (isAuthenticated) {
@@ -57,11 +70,13 @@ function App() {
           )}
 
           {user !== undefined ? (
-            <UploadComponent user={user} />
+            <UploadComponent user={user} fetchUsersMemes={fetchUsersMemes} />
           ) : (
             "Please connect your wallet to create Memes"
           )}
-          {user && <ShowMemes user={user} />}
+          {user && (
+            <ShowMemes fetchUsersMemes={fetchUsersMemes} results={results} />
+          )}
           <LogOut />
         </Stack>
       </Container>
