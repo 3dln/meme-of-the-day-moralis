@@ -84,7 +84,7 @@ function App() {
             </Button>
           )}
 
-          <Tabs>
+          <Tabs isLazy defaultIndex={1}>
             <TabList>
               <Tab>Memes of others</Tab>
               <Tab>Your Memes</Tab>

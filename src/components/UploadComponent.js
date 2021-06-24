@@ -47,6 +47,8 @@ function UploadComponent({ user, fetchUsersMemes }) {
       });
     }
     setIsUploading(false);
+    setName("");
+    setDescription("");
   };
 
   return (
