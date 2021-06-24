@@ -86,22 +86,11 @@ function App() {
 
           <Tabs>
             <TabList>
-              <Tab>Your Memes</Tab>
               <Tab>Memes of others</Tab>
+              <Tab>Your Memes</Tab>
               <Tab>Create new Meme</Tab>
             </TabList>
             <TabPanels>
-              <TabPanel>
-                {" "}
-                {results !== undefined ? (
-                  <ShowMemes
-                    fetchUsersMemes={fetchUsersMemes}
-                    results={results}
-                  />
-                ) : (
-                  "Looks like you don't have any Memes yet!"
-                )}
-              </TabPanel>
               <TabPanel>
                 {" "}
                 {allMemes !== undefined ? (
@@ -111,6 +100,17 @@ function App() {
                   />
                 ) : (
                   "Loading Memes..."
+                )}
+              </TabPanel>
+              <TabPanel>
+                {" "}
+                {results !== undefined ? (
+                  <ShowMemes
+                    fetchUsersMemes={fetchUsersMemes}
+                    results={results}
+                  />
+                ) : (
+                  "Looks like you don't have any Memes yet!"
                 )}
               </TabPanel>
               <TabPanel>

@@ -45,10 +45,10 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes, user }) {
             const Memes = Moralis.Object.extend("Memes");
             const query = new Moralis.Query(Memes);
             const toUpdate = await query.get(meme.id);
-            toUpdate.add("voters", currentUser.id);
-            toUpdate.save();
-            toUpdate.increment("votes");
-            toUpdate.save();
+            await toUpdate.add("voters", currentUser.id);
+            await toUpdate.save();
+            await toUpdate.increment("votes");
+            await toUpdate.save();
             window.location.reload();
           }}
         >
@@ -60,8 +60,8 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes, user }) {
             const Memes = Moralis.Object.extend("Memes");
             const query = new Moralis.Query(Memes);
             const toUpdate = await query.get(meme.id);
-            toUpdate.decrement("votes");
-            toUpdate.save();
+            await toUpdate.decrement("votes");
+            await toUpdate.save();
             const voters = toUpdate.attributes.voters;
             const voterIndex = voters.indexOf(currentUser.id);
             console.log(voterIndex);
@@ -69,8 +69,8 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes, user }) {
               voters.splice(voterIndex, 1);
             }
             console.log(voters);
-            toUpdate.set("voters", voters);
-            toUpdate.save();
+            await toUpdate.set("voters", voters);
+            await toUpdate.save();
             window.location.reload();
           }}
         >
