@@ -31,7 +31,7 @@ function UploadComponent({ user, fetchUsersMemes }) {
       await newMeme.save();
       await fetchUsersMemes();
       setIsUploading(false);
-
+      alert("Your meme got created! You can see it in Your Memes - Section");
       const query = new Moralis.Query("Memes");
       query.equalTo("owner", user);
       query.find().then(([meme]) => {
