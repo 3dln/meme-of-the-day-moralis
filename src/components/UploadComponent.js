@@ -27,6 +27,7 @@ function UploadComponent({ user, fetchUsersMemes }) {
       newMeme.set("name", name);
       newMeme.set("description", description);
       newMeme.set("votes:", votes);
+      newMeme.set("voters", []);
       await newMeme.save();
       await fetchUsersMemes();
       setIsUploading(false);
@@ -42,6 +43,7 @@ function UploadComponent({ user, fetchUsersMemes }) {
         console.log("IPFSHash of Meme", meme.attributes.hash);
         console.log("Description of Meme", meme.attributes.description);
         console.log("Votecount of Meme", meme.attributes.votes);
+        console.log("Voters:", meme.attributes.voters);
       });
     }
     setIsUploading(false);
