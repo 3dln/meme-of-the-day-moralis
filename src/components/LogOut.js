@@ -4,7 +4,18 @@ import { Button } from "@chakra-ui/react";
 
 function LogOut() {
   const { logout } = useMoralis();
-  return <Button onClick={() => logout()}>Logout</Button>;
+  return (
+    <Button
+      onClick={() => {
+        logout();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }}
+    >
+      Logout
+    </Button>
+  );
 }
 
 export default LogOut;

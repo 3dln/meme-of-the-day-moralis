@@ -7,6 +7,7 @@ import {
   Image,
   Button,
 } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
 import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn";
@@ -16,6 +17,7 @@ import ResetPassword from "./components/ResetPassword";
 import UploadComponent from "./components/UploadComponent";
 import GreetUser from "./components/GreetUser";
 import ShowMemes from "./components/ShowMemes";
+import ShowMemesLandingPage from "./components/ShowMemesLandingPage";
 import ConnectWallet from "./components/ConnectWallet";
 import Moralis from "moralis/lib/browser/Parse";
 
@@ -24,6 +26,7 @@ function App() {
   const [user, setUser] = useState();
   const [hasWeb3, setHasWeb3] = useState();
   const [results, setResults] = useState([]);
+  const [allMemes, setAllMemes] = useState([]);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -56,11 +59,22 @@ function App() {
     }
   };
 
+  const fetchAllMemes = async () => {
+    const query = new Moralis.Query("Memes");
+    query.notEqualTo("owner", Moralis.User.current());
+    const allMemes = await query.find();
+    if (allMemes !== undefined) {
+      setAllMemes(allMemes);
+      console.log(allMemes);
+    }
+  };
+
   if (isAuthenticated) {
     return (
       <Container>
         <Stack spacing={6}>
           <GreetUser />
+          <LogOut />
           {hasWeb3 === true ? (
             <ConnectWallet setCurrentUser={setCurrentUser} user={user} />
           ) : (
@@ -69,15 +83,47 @@ function App() {
             </Button>
           )}
 
-          {user !== undefined ? (
-            <UploadComponent user={user} fetchUsersMemes={fetchUsersMemes} />
-          ) : (
-            "Please connect your wallet to create Memes"
-          )}
-          {user && (
-            <ShowMemes fetchUsersMemes={fetchUsersMemes} results={results} />
-          )}
-          <LogOut />
+          <Tabs>
+            <TabList>
+              <Tab>Your Memes</Tab>
+              <Tab>Memes of others</Tab>
+              <Tab>Create new Meme</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                {" "}
+                {results !== undefined ? (
+                  <ShowMemes
+                    fetchUsersMemes={fetchUsersMemes}
+                    results={results}
+                  />
+                ) : (
+                  "Looks like you don't have any Memes yet!"
+                )}
+              </TabPanel>
+              <TabPanel>
+                {" "}
+                {allMemes !== undefined ? (
+                  <ShowMemesLandingPage
+                    fetchAllMemes={fetchAllMemes}
+                    allMemes={allMemes}
+                  />
+                ) : (
+                  "Loading Memes..."
+                )}
+              </TabPanel>
+              <TabPanel>
+                {user !== undefined ? (
+                  <UploadComponent
+                    user={user}
+                    fetchUsersMemes={fetchUsersMemes}
+                  />
+                ) : (
+                  "Please connect your wallet to create Memes"
+                )}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Stack>
       </Container>
     );
@@ -92,19 +138,26 @@ function App() {
             alt="LogoMOTD"
           />
         </Heading>
-        <Stack spacing={6}>
-          {authError && <AuthError />}
-          {/* <MetaMaskAuthentication />
-          <Text textAlign="center">
-            <em>or</em>
-          </Text> */}
-          <SignUp />
-          <Text textAlign="center">
-            <em>or</em>
-          </Text>
-          <LogIn />
-          <ResetPassword />
-        </Stack>
+
+        {authError && <AuthError />}
+        <Tabs>
+          <TabList>
+            <Tab>Login</Tab>
+            <Tab>Sign Up</Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>
+              <Stack spacing={8}>
+                <LogIn />
+                <ResetPassword />
+              </Stack>
+            </TabPanel>
+            <TabPanel>
+              <SignUp />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </Container>
     </div>
   );
