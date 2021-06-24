@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   Button,
+  Box,
 } from "@chakra-ui/react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
@@ -132,12 +133,15 @@ function App() {
   return (
     <div className="App">
       <Container>
-        <Heading mb={6}>
-          <Image
-            src="https://dashboard-assets.dappradar.com/document/5158/memeoftheday-dapp-collectibles-matic-logo-166x166_e565ca917e493c8e5c6196776a56384c.png"
-            alt="LogoMOTD"
-          />
-        </Heading>
+        <Box>
+          <Heading mb={6}>
+            <Image
+              src="https://dashboard-assets.dappradar.com/document/5158/memeoftheday-dapp-collectibles-matic-logo-166x166_e565ca917e493c8e5c6196776a56384c.png"
+              alt="LogoMOTD"
+            />
+            <Text fontSize="md">on Mumbai Testnet</Text>
+          </Heading>
+        </Box>
 
         {authError && <AuthError />}
         <Tabs>
