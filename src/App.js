@@ -23,7 +23,7 @@ import ConnectWallet from "./components/ConnectWallet";
 import Moralis from "moralis/lib/browser/Parse";
 
 function App() {
-  const { isAuthenticated, authError } = useMoralis();
+  const { isAuthenticated, authError, isInitialized } = useMoralis();
   const [user, setUser] = useState();
   const [hasWeb3, setHasWeb3] = useState();
   const [results, setResults] = useState([]);
@@ -148,8 +148,8 @@ function App() {
           <TabList>
             <Tab>Login</Tab>
             <Tab>Sign Up</Tab>
+            <Tab>Show me Memes</Tab>
           </TabList>
-
           <TabPanels>
             <TabPanel>
               <Stack spacing={8}>
@@ -159,6 +159,17 @@ function App() {
             </TabPanel>
             <TabPanel>
               <SignUp />
+            </TabPanel>
+            <TabPanel>
+              <Text color="red">Login or SignUp to use all features</Text>
+              {isInitialized === true ? (
+                <ShowMemesLandingPage
+                  fetchAllMemes={fetchAllMemes}
+                  allMemes={allMemes}
+                />
+              ) : (
+                "Loading..."
+              )}
             </TabPanel>
           </TabPanels>
         </Tabs>

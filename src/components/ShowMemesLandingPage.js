@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { Box, Image, Text, Heading, Stack, Button } from "@chakra-ui/react";
 import { Moralis } from "moralis";
 
-function ShowMemesLandingPage({ allMemes, fetchAllMemes, user }) {
-  const currentUser = Moralis.User.current();
+function ShowMemesLandingPage({ allMemes, fetchAllMemes }) {
+  // const currentUser = Moralis.User.current();
   const memes = allMemes.map((meme, i) => (
     <Box>
       <Text key={`Title` + meme.id}>
@@ -39,7 +39,7 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes, user }) {
         <strong>Votes: </strong>
         {meme.attributes.votes}
       </Text>
-      {!meme.attributes.voters.includes(currentUser.id) ? (
+      {/* {!meme.attributes.voters.includes(currentUser.id) ? (
         <Button
           onClick={async () => {
             const Memes = Moralis.Object.extend("Memes");
@@ -55,6 +55,7 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes, user }) {
           Vote
         </Button>
       ) : (
+        ""
         <Button
           onClick={async () => {
             const Memes = Moralis.Object.extend("Memes");
@@ -76,7 +77,7 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes, user }) {
         >
           Unvote
         </Button>
-      )}
+      )} */}
     </Box>
   ));
 
