@@ -4,8 +4,11 @@ import { Box, Button, Input, Textarea, BeatLoader } from "@chakra-ui/react";
 
 function UploadComponent({ user, fetchUsersMemes }) {
   const [name, setName] = useState();
+  const nameInputRef = React.useRef();
   const [file, setFile] = useState();
+  const fileInputRef = React.useRef();
   const [description, setDescription] = useState();
+  const descriptionInputRef = React.useRef();
   const [isUploading, setIsUploading] = useState(false);
 
   const handleUpload = async () => {
@@ -29,6 +32,15 @@ function UploadComponent({ user, fetchUsersMemes }) {
       newMeme.set("votes:", votes);
       newMeme.set("voters", []);
       await newMeme.save();
+
+      //Clean up
+      nameInputRef.current.value = "";
+      setName("");
+      descriptionInputRef.current.value = "";
+      setDescription("");
+      fileInputRef.current.value = "";
+      setFile(null);
+
       await fetchUsersMemes();
       setIsUploading(false);
       alert("Your meme got created! You can see it in Your Memes - Section");
@@ -47,8 +59,6 @@ function UploadComponent({ user, fetchUsersMemes }) {
       });
     }
     setIsUploading(false);
-    setName("");
-    setDescription("");
   };
 
   return (
@@ -57,11 +67,13 @@ function UploadComponent({ user, fetchUsersMemes }) {
         placeholder="Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        ref={nameInputRef}
       />
       <Textarea
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        ref={descriptionInputRef}
       />
       <Input
         type={"file"}
@@ -69,6 +81,7 @@ function UploadComponent({ user, fetchUsersMemes }) {
         onChange={(e) => {
           setFile(e.target.files[0]);
         }}
+        ref={fileInputRef}
       ></Input>
 
       <Button onClick={handleUpload}>Create Meme</Button>

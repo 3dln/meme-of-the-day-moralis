@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { Box, Image, Text, Heading, Stack, Button } from "@chakra-ui/react";
 import { Moralis } from "moralis";
 
-function ShowMemesLandingPage({ allMemes, fetchAllMemes }) {
-  // const currentUser = Moralis.User.current();
+function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
+  const currentUser = Moralis.User.current();
   const memes = allMemes.map((meme, i) => (
     <Box>
       <Text key={`Title` + meme.id}>
@@ -39,6 +39,42 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes }) {
         <strong>Votes: </strong>
         {meme.attributes.votes}
       </Text>
+      {!meme.attributes.voters.includes(currentUser.id) ? (
+        <Button
+          onClick={async () => {
+            const Memes = Moralis.Object.extend("Memes");
+            const query = new Moralis.Query(Memes);
+            const toUpdate = await query.get(meme.id);
+            await toUpdate.add("voters", currentUser.id);
+            await toUpdate.save();
+            await toUpdate.increment("votes");
+            await toUpdate.save();
+          }}
+        >
+          Vote
+        </Button>
+      ) : (
+        <Button
+          onClick={async () => {
+            const Memes = Moralis.Object.extend("Memes");
+            const query = new Moralis.Query(Memes);
+            const toUpdate = await query.get(meme.id);
+            await toUpdate.decrement("votes");
+            await toUpdate.save();
+            const voters = toUpdate.attributes.voters;
+            const voterIndex = voters.indexOf(currentUser.id);
+            console.log(voterIndex);
+            if (voterIndex > -1) {
+              voters.splice(voterIndex, 1);
+            }
+            console.log(voters);
+            await toUpdate.set("voters", voters);
+            await toUpdate.save();
+          }}
+        >
+          Unvote
+        </Button>
+      )}
     </Box>
   ));
 
@@ -59,4 +95,4 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes }) {
   );
 }
 
-export default ShowMemesLandingPage;
+export default ShowMemesLandingPageLoggedIn;

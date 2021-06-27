@@ -19,6 +19,7 @@ import UploadComponent from "./components/UploadComponent";
 import GreetUser from "./components/GreetUser";
 import ShowMemes from "./components/ShowMemes";
 import ShowMemesLandingPage from "./components/ShowMemesLandingPage";
+import ShowMemesLandingPageLoggedIn from "./components/ShowMemesLandingPageLoggedIn";
 import ConnectWallet from "./components/ConnectWallet";
 import Moralis from "moralis/lib/browser/Parse";
 
@@ -94,7 +95,7 @@ function App() {
               <TabPanel>
                 {" "}
                 {allMemes !== undefined ? (
-                  <ShowMemesLandingPage
+                  <ShowMemesLandingPageLoggedIn
                     fetchAllMemes={fetchAllMemes}
                     allMemes={allMemes}
                   />
