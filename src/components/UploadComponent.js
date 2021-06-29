@@ -15,15 +15,27 @@ function UploadComponent({ user, fetchUsersMemes }) {
     setIsUploading(true);
     const MoralisFile = new Moralis.File(file.name, file);
     await MoralisFile.saveIPFS();
-    const ipfs = await MoralisFile.ipfs();
-    const hash = await MoralisFile.hash();
+    const ipfsImage = await MoralisFile.ipfs();
+    const hashImage = await MoralisFile.hash();
     var votes = 0;
-    console.log("Meme created. Fetching data...");
 
-    if (ipfs && hash) {
+    //creating metada of NFT on ipfs, to paste url to ERC1155 object on blockhain
+    const metadata = {
+      name: name,
+      description: description,
+      image: ipfsImage
+    }
+    const MetadataFile = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))})
+    await MetadataFile.saveIPFS();
+    const ipfsMetada = await MetadataFile.ipfs();
+    const hashMetadata = await MetadataFile.hash;
+    console.log(ipfsMetada);
+
+    console.log("Meme created. Fetching data...");
+    if (ipfsImage && hashImage) {
       const newMeme = new Moralis.Object("Memes");
-      newMeme.set("ipfs", ipfs);
-      newMeme.set("hash", hash);
+      newMeme.set("ipfs", ipfsImage);
+      newMeme.set("hash", hashImage);
       newMeme.set("file", MoralisFile);
       newMeme.set("owner", user);
       newMeme.set("address", window.ethereum.selectedAddress);
@@ -31,6 +43,7 @@ function UploadComponent({ user, fetchUsersMemes }) {
       newMeme.set("description", description);
       newMeme.set("votes:", votes);
       newMeme.set("voters", []);
+      newMeme.set("metadata", ipfsMetada)
       await newMeme.save();
 
       //Clean up

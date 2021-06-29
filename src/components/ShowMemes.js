@@ -24,6 +24,9 @@ function ShowMemes({ results, fetchUsersMemes }) {
       <Text>
         <strong>Hash: </strong> {meme.attributes.hash}
       </Text>
+      <Text>
+        <strong>Metadata: </strong> {meme.attributes.metadata}
+      </Text>
       <Image
         boxSize="350px"
         src={meme.attributes.ipfs}
