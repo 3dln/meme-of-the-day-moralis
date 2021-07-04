@@ -7,6 +7,7 @@ import {
   Image,
   Button,
   Box,
+  Input,
 } from "@chakra-ui/react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useMoralis } from "react-moralis";
@@ -29,6 +30,9 @@ function App() {
   const [hasWeb3, setHasWeb3] = useState();
   const [results, setResults] = useState([]);
   const [allMemes, setAllMemes] = useState([]);
+  const [fetchId, setFetchId] = useState("");
+  const [limit, setLimit] = useState("");
+  const [sort, setSort] = useState("");
 
   useEffect(() => {
     if (window.ethereum) {
@@ -134,22 +138,25 @@ function App() {
   return (
     <div className="App">
       <Container>
-        <Box>
+        <Box align="center">
           <Heading mb={6}>
             <Image
               src="https://dashboard-assets.dappradar.com/document/5158/memeoftheday-dapp-collectibles-matic-logo-166x166_e565ca917e493c8e5c6196776a56384c.png"
               alt="LogoMOTD"
+              borderRadius="0px 0px 18px 18px"
             />
             <Text fontSize="md">on Mumbai Testnet</Text>
           </Heading>
         </Box>
 
         {authError && <AuthError />}
-        <Tabs>
+
+        <Tabs defaultIndex={2}>
           <TabList>
             <Tab>Login</Tab>
             <Tab>Sign Up</Tab>
             <Tab>Show me Memes</Tab>
+            <Tab>Queries</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -171,6 +178,127 @@ function App() {
               ) : (
                 "Loading..."
               )}
+            </TabPanel>
+            <TabPanel>
+              {/* FETCH MEME BY ID */}
+              <Box>
+                <Input
+                  placeholder="insert id"
+                  onChange={(e) => setFetchId(e.target.value)}
+                  value={fetchId}
+                  mt={2}
+                />
+                <Button
+                  colorScheme="teal"
+                  onClick={async () => {
+                    if (fetchId === undefined || fetchId === "") {
+                      alert("Please insert an id!");
+                      return;
+                    }
+                    let result = await Moralis.Cloud.run("fetchById", {
+                      memeId: fetchId,
+                    });
+                    if (result === undefined || result.length <= 0) {
+                      alert("No meme found for this id");
+                      setFetchId("");
+                    }
+                    if (result !== undefined && result.length > 0) {
+                      console.log(result[0]);
+                      alert(
+                        "Found meme with Id " +
+                          fetchId +
+                          " and name " +
+                          result[0].name
+                      );
+                      setFetchId("");
+                    }
+                  }}
+                  mt={2}
+                >
+                  Fetch by Id
+                </Button>
+              </Box>
+              {/* FETCH ALL MEMES */}
+              <Box mt={2}>
+                <Button
+                  onClick={async () => {
+                    let result = await Moralis.Cloud.run("fetchAllMemes");
+                    if (result !== undefined && result.length > 0) {
+                      alert("Found " + result.length + " Memes");
+                      console.log(result);
+                    }
+                    if (result === undefined || result.length === 0) {
+                      alert("No Memes found");
+                    }
+                  }}
+                >
+                  FetchAllMemes
+                </Button>
+              </Box>
+              {/* FETCH LIMIT SORT VOTES */}
+              <Box>
+                <Input
+                  placeholder="insert limit"
+                  onChange={(e) => setLimit(e.target.value)}
+                  value={limit}
+                  mt={2}
+                />
+                <Input
+                  placeholder="1 for asc, -1 for desc"
+                  onChange={(e) => setSort(e.target.value)}
+                  value={sort}
+                  mt={2}
+                />
+                <Button
+                  colorScheme="teal"
+                  onClick={async () => {
+                    try {
+                      let result = await Moralis.Cloud.run(
+                        "fetchLimitSortVotes",
+                        {
+                          sort: parseInt(sort),
+                          limit: parseInt(limit),
+                        }
+                      );
+                      if (result === undefined || result.length <= 0) {
+                        alert("No memes found");
+                        setSort("");
+                        setLimit("");
+                      }
+                      if (result !== undefined && result.length > 0) {
+                        console.log("FetchLimitSortVotesResult: ", result);
+                        alert("Found meme(s) " + result.length);
+                        setSort("");
+                        setLimit("");
+                      }
+                    } catch (error) {
+                      console.error(error);
+                      setSort("");
+                      setLimit("");
+                    }
+                  }}
+                  mt={2}
+                >
+                  Fetch with limit and sort
+                </Button>
+              </Box>
+              {/* FETCH CREATEDAT DESC */}
+              <Box>
+                <Button
+                  onClick={async () => {
+                    let result = await Moralis.Cloud.run("fetchCreatedAtDesc");
+                    if (result !== undefined && result.length > 0) {
+                      alert(
+                        "Fetched all memes sorted by createdAt desc. See console for results!"
+                      );
+                      console.log("fetchCreatedAtDesc Results: ", result);
+                    }
+                  }}
+                  mt={2}
+                >
+                  Fetch Created At Desc
+                </Button>
+              </Box>
             </TabPanel>
           </TabPanels>
         </Tabs>
