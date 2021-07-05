@@ -3,7 +3,7 @@ import { Moralis } from "moralis";
 import { Box, Button, Input, Textarea, BeatLoader } from "@chakra-ui/react";
 
 function UploadComponent({ user, fetchUsersMemes }) {
-  const [name, setName] = useState();
+  const [memeName, setMemeName] = useState();
   const nameInputRef = React.useRef();
   const [file, setFile] = useState();
   const fileInputRef = React.useRef();
@@ -21,11 +21,13 @@ function UploadComponent({ user, fetchUsersMemes }) {
 
     //creating metada of NFT on ipfs, to paste url to ERC1155 object on blockhain
     const metadata = {
-      name: name,
+      memeName: memeName, //name is a reserved keyword and can not be used, changed to memeName
       description: description,
-      image: ipfsImage
-    }
-    const MetadataFile = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))})
+      image: ipfsImage,
+    };
+    const MetadataFile = new Moralis.File("metadata.json", {
+      base64: btoa(JSON.stringify(metadata)),
+    });
     await MetadataFile.saveIPFS();
     const ipfsMetada = await MetadataFile.ipfs();
     const hashMetadata = await MetadataFile.hash;
@@ -39,16 +41,16 @@ function UploadComponent({ user, fetchUsersMemes }) {
       newMeme.set("file", MoralisFile);
       newMeme.set("owner", user);
       newMeme.set("address", window.ethereum.selectedAddress);
-      newMeme.set("name", name);
+      newMeme.set("memeName", memeName);
       newMeme.set("description", description);
       newMeme.set("votes:", votes);
       newMeme.set("voters", []);
-      newMeme.set("metadata", ipfsMetada)
+      newMeme.set("metadata", ipfsMetada);
       await newMeme.save();
 
       //Clean up
       nameInputRef.current.value = "";
-      setName("");
+      setMemeName("");
       descriptionInputRef.current.value = "";
       setDescription("");
       fileInputRef.current.value = "";
@@ -78,8 +80,8 @@ function UploadComponent({ user, fetchUsersMemes }) {
     <Box>
       <Input
         placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={memeName}
+        onChange={(e) => setMemeName(e.target.value)}
         ref={nameInputRef}
       />
       <Textarea

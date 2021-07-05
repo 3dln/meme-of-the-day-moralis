@@ -42,13 +42,18 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
         <strong>Votes: </strong>
         {meme.attributes.votes}
       </Text>
-      {!meme.attributes.voters.includes(currentUser.id) ? (
+      {!meme.attributes.voters.find(
+        (voter) => voter.voter === currentUser.id
+      ) ? (
         <Button
           onClick={async () => {
             const Memes = Moralis.Object.extend("Memes");
             const query = new Moralis.Query(Memes);
             const toUpdate = await query.get(meme.id);
-            await toUpdate.add("voters", currentUser.id);
+            await toUpdate.add("voters", {
+              voter: currentUser.id,
+              timestamp: Date.now(),
+            });
             await toUpdate.save();
             await toUpdate.increment("votes");
             await toUpdate.save();
@@ -65,7 +70,9 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
             await toUpdate.decrement("votes");
             await toUpdate.save();
             const voters = toUpdate.attributes.voters;
-            const voterIndex = voters.indexOf(currentUser.id);
+            const voterIndex = voters.findIndex(
+              (voter) => voter.voter === currentUser.id
+            );
             console.log(voterIndex);
             if (voterIndex > -1) {
               voters.splice(voterIndex, 1);
@@ -93,6 +100,14 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
   return (
     <>
       <Heading>Memes from other users</Heading>
+      <Button
+        onClick={async () => {
+          let result = await Moralis.Cloud.run("fetchMyVotes");
+          console.log(result);
+        }}
+      >
+        FetchMyVotes
+      </Button>
       <Stack spacing={7}>{memes}</Stack>
     </>
   );

@@ -157,6 +157,7 @@ function App() {
             <Tab>Sign Up</Tab>
             <Tab>Show me Memes</Tab>
             <Tab>Queries</Tab>
+            <Tab>Meme Of The Day</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -252,29 +253,83 @@ function App() {
                 <Button
                   colorScheme="teal"
                   onClick={async () => {
-                    try {
-                      let result = await Moralis.Cloud.run(
-                        "fetchLimitSortVotes",
-                        {
-                          sort: parseInt(sort),
-                          limit: parseInt(limit),
+                    if (sort === "" && limit !== "") {
+                      try {
+                        let result = await Moralis.Cloud.run(
+                          "fetchLimitSortVotes",
+                          {
+                            sort: -1,
+                            limit: parseInt(limit),
+                          }
+                        );
+                        if (result === undefined || result.length <= 0) {
+                          alert("No memes found");
+                          setSort("");
+                          setLimit("");
                         }
-                      );
-                      if (result === undefined || result.length <= 0) {
-                        alert("No memes found");
+                        if (result !== undefined && result.length > 0) {
+                          console.log("FetchLimitSortVotesResult: ", result);
+                          alert("Found meme(s) " + result.length);
+                          setSort("");
+                          setLimit("");
+                        }
+                      } catch (error) {
+                        console.error(error);
                         setSort("");
                         setLimit("");
                       }
-                      if (result !== undefined && result.length > 0) {
-                        console.log("FetchLimitSortVotesResult: ", result);
-                        alert("Found meme(s) " + result.length);
+                    } else if (limit === "" && sort === "") {
+                      try {
+                        let result = await Moralis.Cloud.run(
+                          "fetchLimitSortVotes",
+                          {
+                            sort: -1,
+                            limit: 9999999999999999999999999,
+                          }
+                        );
+                        if (result === undefined || result.length <= 0) {
+                          alert("No memes found");
+                          setSort("");
+                          setLimit("");
+                        }
+                        if (result !== undefined && result.length > 0) {
+                          console.log("FetchLimitSortVotesResult: ", result);
+                          alert("Found meme(s) " + result.length);
+                          setSort("");
+                          setLimit("");
+                        }
+                      } catch (error) {
+                        console.error(error);
                         setSort("");
                         setLimit("");
                       }
-                    } catch (error) {
-                      console.error(error);
-                      setSort("");
-                      setLimit("");
+                    } else {
+                      try {
+                        let result = await Moralis.Cloud.run(
+                          "fetchLimitSortVotes",
+                          {
+                            sort: parseInt(sort),
+                            limit: parseInt(limit),
+                          }
+                        );
+                        if (result === undefined || result.length <= 0) {
+                          alert("No memes found");
+                          setSort("");
+                          setLimit("");
+                        }
+                        if (result !== undefined && result.length > 0) {
+                          console.log("FetchLimitSortVotesResult: ", result);
+                          alert(
+                            "Found meme(s) " + result.length + " and sorted!"
+                          );
+                          setSort("");
+                          setLimit("");
+                        }
+                      } catch (error) {
+                        console.error(error);
+                        setSort("");
+                        setLimit("");
+                      }
                     }
                   }}
                   mt={2}
@@ -300,6 +355,7 @@ function App() {
                 </Button>
               </Box>
             </TabPanel>
+            <TabPanel>The current meme of the day is</TabPanel>
           </TabPanels>
         </Tabs>
       </Container>
