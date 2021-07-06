@@ -33,6 +33,7 @@ function App() {
   const [fetchId, setFetchId] = useState("");
   const [limit, setLimit] = useState("");
   const [sort, setSort] = useState("");
+  const [ranking, setRanking] = useState();
 
   useEffect(() => {
     if (window.ethereum) {
@@ -355,7 +356,51 @@ function App() {
                 </Button>
               </Box>
             </TabPanel>
-            <TabPanel>The current meme of the day is</TabPanel>
+            <TabPanel>
+              <Box>
+                Fetch current meme of the day:
+                <Button
+                  onClick={async () => {
+                    let memes = await Moralis.Cloud.run("fetchAllMemes");
+                    console.log(memes);
+                    let oneDay = 24 * 60 * 60 * 1000;
+                    console.log(oneDay);
+                    let posts = [];
+                    const filteredMemes = memes.filter((meme) => {
+                      return meme.voters.find((currentTimestamp) =>
+                        currentTimestamp.timestamp >= Date.now() - oneDay
+                          ? posts.push(meme)
+                          : ""
+                      );
+                    });
+                    console.log("FM", filteredMemes);
+                    const highestVotes = filteredMemes.sort((a, b) => {
+                      return b.voters.length - a.voters.length;
+                    });
+                    setRanking();
+                    setRanking(highestVotes);
+                  }}
+                >
+                  Fetch Meme of the Day
+                </Button>
+                {ranking
+                  ? ranking.map((ranking, i) => (
+                      <Box mb={4}>
+                        <Text fontSize="3xl">
+                          {"Rank " +
+                            i +
+                            " " +
+                            ranking.memeName +
+                            " with " +
+                            ranking.voters.length +
+                            " votes in the last 24 hours"}
+                        </Text>
+                        <img src={ranking.file._url} alt={ranking.memeName} />
+                      </Box>
+                    ))
+                  : ""}
+              </Box>
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </Container>

@@ -102,8 +102,14 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
       <Heading>Memes from other users</Heading>
       <Button
         onClick={async () => {
-          let result = await Moralis.Cloud.run("fetchMyVotes");
-          console.log(result);
+          let memes = await Moralis.Cloud.run("fetchAllMemes");
+          console.log("ALLMEMES", memes);
+          const filteredMemes = memes.filter((meme) => {
+            return meme.voters.find(
+              (currentVoter) => currentVoter.voter === currentUser.id
+            );
+          });
+          console.log("FILTERS", filteredMemes);
         }}
       >
         FetchMyVotes
