@@ -203,3 +203,25 @@ const handleUpload = async () => {
   }
   setIsUploading(false);
 };
+
+//NAME: fetchMemeOfTheDay
+//INPUT: --------------------
+//OUTPUT: ranking of all memes voted on in past 24hours.
+const fetchMemeOfTheDay = async () => {
+  let memes = await Moralis.Cloud.run("fetchAllMemes");
+  console.log(memes);
+  let oneDay = 24 * 60 * 60 * 1000;
+  console.log(oneDay);
+  let posts = [];
+  const filteredMemes = memes.filter((meme) => {
+    return meme.voters.find((currentTimestamp) =>
+      currentTimestamp.timestamp >= Date.now() - oneDay ? posts.push(meme) : ""
+    );
+  });
+  console.log("FM", filteredMemes);
+  const highestVotes = filteredMemes.sort((a, b) => {
+    return b.voters.length - a.voters.length;
+  });
+  setRanking();
+  setRanking(highestVotes);
+};

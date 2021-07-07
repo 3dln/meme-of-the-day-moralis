@@ -7,6 +7,7 @@ import {
   AlertDescription,
   AlertIcon,
   CloseButton,
+  Box,
 } from "@chakra-ui/react";
 
 function ConnectWallet({ setCurrentUser, user }) {
@@ -72,6 +73,17 @@ function ConnectWallet({ setCurrentUser, user }) {
       {isConnected === false && (
         <Button onClick={connectUserWallet}>Connect your Wallet</Button>
       )}
+      {isConnected === true && (
+        <Box>
+          <Button isDisabled>
+            Connected: {window.ethereum.selectedAddress}
+          </Button>
+          <Button onClick={() => setIsConnected(false)}>Disconnect</Button>
+        </Box>
+      )}
+      {/* {isConnected === true && (
+        <Button onClick={setIsConnected(false)}>Disconnect</Button>
+      )} */}
       {accountChanged && (
         <Alert status="error">
           <AlertIcon />

@@ -22,6 +22,7 @@ import ShowMemes from "./components/ShowMemes";
 import ShowMemesLandingPage from "./components/ShowMemesLandingPage";
 import ShowMemesLandingPageLoggedIn from "./components/ShowMemesLandingPageLoggedIn";
 import ConnectWallet from "./components/ConnectWallet";
+import MemeOfTheDay from "./components/MemeOfTheDay";
 import Moralis from "moralis/lib/browser/Parse";
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
   const [fetchId, setFetchId] = useState("");
   const [limit, setLimit] = useState("");
   const [sort, setSort] = useState("");
-  const [ranking, setRanking] = useState();
+  // const [ranking, setRanking] = useState();
 
   useEffect(() => {
     if (window.ethereum) {
@@ -92,11 +93,19 @@ function App() {
 
           <Tabs isLazy defaultIndex={1}>
             <TabList>
-              <Tab>Memes of others</Tab>
-              <Tab>Your Memes</Tab>
+              <Tab>Meme Of The Day</Tab>
+              <Tab>Memes Stream</Tab>
+              <Tab>My Memes</Tab>
               <Tab>Create new Meme</Tab>
             </TabList>
             <TabPanels>
+              <TabPanel>
+                {isInitialized ? (
+                  <MemeOfTheDay isInitialized={isInitialized} />
+                ) : (
+                  "Loading Memes"
+                )}
+              </TabPanel>
               <TabPanel>
                 {" "}
                 {allMemes !== undefined ? (
@@ -152,23 +161,17 @@ function App() {
 
         {authError && <AuthError />}
 
-        <Tabs defaultIndex={2}>
+        <Tabs defaultIndex={0}>
           <TabList>
+            <Tab>Meme Of The Day</Tab>
+            <Tab>All Memes</Tab>
             <Tab>Login</Tab>
             <Tab>Sign Up</Tab>
-            <Tab>Show me Memes</Tab>
             <Tab>Queries</Tab>
-            <Tab>Meme Of The Day</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Stack spacing={8}>
-                <LogIn />
-                <ResetPassword />
-              </Stack>
-            </TabPanel>
-            <TabPanel>
-              <SignUp />
+              {isInitialized ? <MemeOfTheDay /> : "Loading... "}
             </TabPanel>
             <TabPanel>
               <Text color="red">Login or SignUp to use all features</Text>
@@ -181,6 +184,16 @@ function App() {
                 "Loading..."
               )}
             </TabPanel>
+            <TabPanel>
+              <Stack spacing={8}>
+                <LogIn />
+                <ResetPassword />
+              </Stack>
+            </TabPanel>
+            <TabPanel>
+              <SignUp />
+            </TabPanel>
+
             <TabPanel>
               {/* FETCH MEME BY ID */}
               <Box>
@@ -354,51 +367,6 @@ function App() {
                 >
                   Fetch Created At Desc
                 </Button>
-              </Box>
-            </TabPanel>
-            <TabPanel>
-              <Box>
-                Fetch current meme of the day:
-                <Button
-                  onClick={async () => {
-                    let memes = await Moralis.Cloud.run("fetchAllMemes");
-                    console.log(memes);
-                    let oneDay = 24 * 60 * 60 * 1000;
-                    console.log(oneDay);
-                    let posts = [];
-                    const filteredMemes = memes.filter((meme) => {
-                      return meme.voters.find((currentTimestamp) =>
-                        currentTimestamp.timestamp >= Date.now() - oneDay
-                          ? posts.push(meme)
-                          : ""
-                      );
-                    });
-                    console.log("FM", filteredMemes);
-                    const highestVotes = filteredMemes.sort((a, b) => {
-                      return b.voters.length - a.voters.length;
-                    });
-                    setRanking();
-                    setRanking(highestVotes);
-                  }}
-                >
-                  Fetch Meme of the Day
-                </Button>
-                {ranking
-                  ? ranking.map((ranking, i) => (
-                      <Box mb={4}>
-                        <Text fontSize="3xl">
-                          {"Rank " +
-                            i +
-                            " " +
-                            ranking.memeName +
-                            " with " +
-                            ranking.voters.length +
-                            " votes in the last 24 hours"}
-                        </Text>
-                        <img src={ranking.file._url} alt={ranking.memeName} />
-                      </Box>
-                    ))
-                  : ""}
               </Box>
             </TabPanel>
           </TabPanels>
