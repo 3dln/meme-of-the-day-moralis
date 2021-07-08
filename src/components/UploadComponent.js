@@ -75,7 +75,6 @@ function UploadComponent({ user, fetchUsersMemes, motdContract }) {
       setFile(null);
 
       await fetchUsersMemes();
-      setIsUploading(false);
       alert("Your meme got created! You can see it in Your Memes - Section");
       const query = new Moralis.Query("Memes");
       query.equalTo("owner", user);
@@ -116,17 +115,17 @@ function UploadComponent({ user, fetchUsersMemes, motdContract }) {
         }}
         ref={fileInputRef}
       ></Input>
+      {isUploading === false && <Button onClick={handleUpload}>Create Meme</Button>}
+    
 
-      <Button onClick={handleUpload}>Create Meme</Button>
-
-      {/* {isUploading === true && (
+      {isUploading === true && (
         <Button
           isLoading
           loadingText="...creating Meme"
           colorScheme="blue"
-          spinner={<BeatLoader size={8} color="white" />}
-        ></Button>
-      )} */}
+         />
+        
+      )}
     </Box>
   );
 }
