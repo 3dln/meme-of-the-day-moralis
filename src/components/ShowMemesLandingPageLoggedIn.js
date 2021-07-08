@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
-import { Box, Image, Text, Heading, Stack, Button } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Image, Text, Input, Heading, Stack, Button } from "@chakra-ui/react";
 import { Moralis } from "moralis";
 
 function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
+  const [memeComment, setMemeComment] = useState();
+  const commentInputRef = React.useRef();
   const currentUser = Moralis.User.current();
   const memes = allMemes.map((meme, i) => (
     <Box>
@@ -84,7 +86,32 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
         >
           Unvote
         </Button>
-      )}
+        
+
+      )} 
+      <Input
+        placeholder="Comment"
+        value={memeComment}
+        onChange={(e) => setMemeComment(e.target.value)}
+        ref={commentInputRef}
+      />  
+      <Button
+        onClick={async () => {
+          const Memes = Moralis.Object.extend("Memes");
+          const query = new Moralis.Query(Memes);
+          const toComment = await query.get(meme.id);
+          await toComment.add("comments", {
+            user: currentUser.id,
+            comment: memeComment,
+            timestamp: Date.now(),
+          }); 
+          await toComment.save();         
+
+        }}
+      >
+          Comment
+      </Button>
+
     </Box>
   ));
 
@@ -99,7 +126,7 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
 
   return (
     <>
-      <Heading>Memes from other users</Heading>
+      <Heading>Memes from other users hrcek</Heading>
     
       <Stack spacing={7}>{memes}</Stack>
     </>
