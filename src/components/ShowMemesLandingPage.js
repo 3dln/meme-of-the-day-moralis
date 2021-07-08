@@ -5,7 +5,8 @@ import { Moralis } from "moralis";
 function ShowMemesLandingPage({ allMemes, fetchAllMemes }) {
   // const currentUser = Moralis.User.current();
   const memes = allMemes.map((meme, i) => (
-    <Box>
+    <Box  mb={4} pb={4} align="center" bg="#2a9d8f" style={{borderRadius: "15px"}} >
+      <Box width="90%" p={2} m={2} bg="#1d3557" style={{borderRadius: "15px"}}>
       <Text key={`Title` + meme.id}>
         <strong>Title: </strong>
         {meme.attributes.memeName}
@@ -36,15 +37,20 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes }) {
       <Text>
         <strong>TokenID: </strong>{" "}
       </Text>
-      <Image
-        boxSize="350px"
+    </Box>
+    
+      <Image p={1}
+      style={{borderRadius: "15px"}}
+        boxSize="400px"
         src={meme.attributes.ipfs}
         alt={meme.attributes.name}
       />
-      <Text>
-        <strong>Votes: </strong>
+      <Box align="center" width="30%" bg="blue" style={{borderRadius: "15px"}}>
+      <Text fontSize="2xl">
+        <strong>Votes total: </strong>
         {meme.attributes.votes}
       </Text>
+      </Box>
     </Box>
   ));
 
@@ -58,9 +64,12 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes }) {
   }, []);
 
   return (
-    <>
-      <Heading>Memes from other users</Heading>
+    <><Box bg="#264653" mb={4} p={1} style={{borderRadius: "15px"}} align="center">
+      <Heading>All Memes</Heading>
+      </Box>
+      <Box>
       <Stack spacing={7}>{memes}</Stack>
+      </Box>
     </>
   );
 }

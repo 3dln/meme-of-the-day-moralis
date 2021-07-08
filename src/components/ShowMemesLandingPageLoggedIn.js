@@ -5,7 +5,8 @@ import { Moralis } from "moralis";
 function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
   const currentUser = Moralis.User.current();
   const memes = allMemes.map((meme, i) => (
-    <Box>
+    <Box m={4} p={2} align="center" bg="#2a9d8f" style={{borderRadius: "15px"}}>
+         <Box width="90%" p={2} m={2} bg="#1d3557" style={{borderRadius: "15px"}}>
       <Text key={`Title` + meme.id}>
         <strong>Title: </strong>
         {meme.attributes.memeName}
@@ -33,19 +34,28 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
       <Text>
         <strong>Metadata: </strong> {meme.attributes.metadata}
       </Text>
+      </Box>
       <Image
-        boxSize="350px"
+          p={1}
+          style={{borderRadius: "15px"}}
+            boxSize="400px"
         src={meme.attributes.ipfs}
         alt={meme.attributes.name}
       />
+       <Box align="center" width="30%" bg="blue" style={{borderRadius: "15px"}}>
       <Text>
         <strong>Votes: </strong>
         {meme.attributes.votes}
       </Text>
+      </Box>
       {!meme.attributes.voters.find(
         (voter) => voter.voter === currentUser.id
       ) ? (
         <Button
+        size="md"
+        mt={1}
+        border="2px"
+        borderColor="white"
           onClick={async () => {
             const Memes = Moralis.Object.extend("Memes");
             const query = new Moralis.Query(Memes);
@@ -63,6 +73,10 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
         </Button>
       ) : (
         <Button
+        size="md"
+        mt={1}
+        border="2px"
+        borderColor="red"
           onClick={async () => {
             const Memes = Moralis.Object.extend("Memes");
             const query = new Moralis.Query(Memes);
@@ -99,7 +113,9 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
 
   return (
     <>
+      <Box bg="#1d3557" style={{borderRadius: "15px"}} align="center">
       <Heading>Memes from other users</Heading>
+      </Box>
     
       <Stack spacing={7}>{memes}</Stack>
     </>

@@ -35,7 +35,8 @@ function Search() {
           );
         console.log(result);
         const memes = result.map((meme) => (
-            <Box>
+            <Box mt={1} p={2} align="center" bg="#2a9d8f" style={{borderRadius: "15px"}}>
+                <Box width="90%" p={2} m={2} bg="#1d3557" style={{borderRadius: "15px"}}>
             <Text key={`Title` + meme.id}>
               <strong>Title: </strong>
               {meme.attributes.memeName}
@@ -50,15 +51,20 @@ function Search() {
             <Text>
               <strong>Metadata: </strong> {meme.attributes.metadata}
             </Text>
+            </Box>
             <Image
-              boxSize="350px"
+               p={1}
+               style={{borderRadius: "15px"}}
+                 boxSize="400px"
               src={meme.attributes.ipfs}
               alt={meme.attributes.name}
             />
+             <Box align="center" width="30%" bg="blue" style={{borderRadius: "15px"}}>
             <Text>
               <strong>Votes: </strong>
               {meme.attributes.votes}
             </Text>
+            </Box>
           </Box>
         )
     
@@ -81,7 +87,8 @@ function Search() {
           );
         console.log(result);
         const memes = result.map((meme) => (
-            <Box>
+            <Box m={4} p={2} align="center" bg="#2a9d8f" style={{borderRadius: "15px"}}>
+                <Box width="90%" p={2} m={2} bg="#1d3557" style={{borderRadius: "15px"}}>
             <Text key={`Title` + meme.id}>
               <strong>Title: </strong>
               {meme.attributes.memeName}
@@ -96,15 +103,20 @@ function Search() {
             <Text>
               <strong>Metadata: </strong> {meme.attributes.metadata}
             </Text>
+            </Box>
             <Image
-              boxSize="350px"
+               p={1}
+               style={{borderRadius: "15px"}}
+                 boxSize="400px"
               src={meme.attributes.ipfs}
               alt={meme.attributes.name}
             />
+             <Box align="center" width="30%" bg="blue" style={{borderRadius: "15px"}}>
             <Text>
               <strong>Votes: </strong>
               {meme.attributes.votes}
             </Text>
+            </Box>
           </Box>
           
         )
@@ -136,7 +148,7 @@ function Search() {
             </Tabs>
             <Text>{searchResult && searchResult.length > 0 ? 
                 <Box>{searchResult}</Box>
-             : "No results"}</Text>            
+             : "No results, start typing to search the Meme Archive"}</Text>            
         </Box>
     )
 }

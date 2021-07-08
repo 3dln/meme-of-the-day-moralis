@@ -1,11 +1,13 @@
 import React, { useEffect, updateState } from "react";
-import { Box, Image, Text, Heading, Stack, Button } from "@chakra-ui/react";
+import { Box, Image, Text, Heading, Stack, Button, Link } from "@chakra-ui/react";
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { Moralis } from "moralis";
 
 function ShowMemes({ results, fetchUsersMemes }) {
   const currentUser = Moralis.User.current();
   const memes = results.map((meme, i) => (
-    <Box>
+    <Box mb={4} pb={4} align="center" bg="#2a9d8f" style={{borderRadius: "15px"}}>
+      <Box width="90%" p={2} m={2} bg="#1d3557" style={{borderRadius: "15px"}}>
       <Text key={`Title` + meme.id}>
         <strong>Title: </strong>
         {meme.attributes.memeName}
@@ -19,25 +21,32 @@ function ShowMemes({ results, fetchUsersMemes }) {
         {meme.attributes.owner.attributes.username}
       </Text>
       <Text>
-        <strong>ETH Address: </strong>
-        {meme.attributes.owner.attributes.ethAddress}
-      </Text>
-      <Text>
         <strong>Hash: </strong> {meme.attributes.hash}
       </Text>
       <Text>
-        <strong>Metadata: </strong> {meme.attributes.metadata}
+      <strong>Metadata: </strong> 
+        <Link href={meme.attributes.metadata} isExternal>
+        {meme.attributes.metadata} <ExternalLinkIcon mx="2px" />
+        </Link>
       </Text>
+      </Box>
       <Image
-        boxSize="350px"
+       style={{borderRadius: "15px"}}
+       boxSize="400px"
         src={meme.attributes.ipfs}
         alt={meme.attributes.name}
       />
+      <Box mt={1} align="center" width="30%" bg="blue" style={{borderRadius: "15px"}}>
       <Text>
         <strong>Votes: </strong>
         {meme.attributes.votes}
       </Text>
+      </Box>
       <Button
+      size="sm"
+      mt={1}
+      border="2px"
+      borderColor="black"
         onClick={async () => {
           const Memes = Moralis.Object.extend("Memes");
           const query = new Moralis.Query(Memes);
@@ -61,7 +70,10 @@ function ShowMemes({ results, fetchUsersMemes }) {
 
   return (
     <>
+
+    <Box m={1} bg= "#1d3557" style={{borderRadius: "15px"}} align="center" align="center">
       <Heading>Your Memes:</Heading>
+      </Box>
       <Button
         onClick={async () => {
           let memes = await Moralis.Cloud.run("fetchAllMemes");

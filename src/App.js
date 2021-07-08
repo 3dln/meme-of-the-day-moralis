@@ -190,7 +190,7 @@ function App() {
         <Tabs defaultIndex={0}>
           <TabList>
             <Tab>Meme Of The Day</Tab>
-            <Tab>All Memes</Tab>
+            <Tab>Meme Stream</Tab>
             <Tab>Login</Tab>
             <Tab>Sign Up</Tab>
             <Tab>Search</Tab>
@@ -220,7 +220,7 @@ function App() {
             <TabPanel>
               <SignUp />
             </TabPanel>
-            <TabPanel>SEARCH</TabPanel>
+            <TabPanel><Search /></TabPanel>
             <TabPanel>
               {/* QUERIES */}
               {/* FETCH MEME BY ID */}
