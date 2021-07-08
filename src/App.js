@@ -76,9 +76,12 @@ function App() {
 
   //fetches Memes of Current User
   const fetchUsersMemes = async () => {
-    const query = new Moralis.Query("Memes");
-    query.equalTo("owner", Moralis.User.current());
-    const results = await query.find();
+
+    const currentUser =  Moralis.User.current();
+    const results = await Moralis.Cloud.run("fetchMyMemes", {
+      userId: currentUser.id,      
+    });    
+
     // alert("Retrieved " + results.length + " memes.");
     if (results !== undefined && results.length > 0) {
       setResults(results);
