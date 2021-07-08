@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Moralis } from "moralis";
-import { Box, Button, Input, Textarea, BeatLoader } from "@chakra-ui/react";
+import { Box, Button, Input, Textarea } from "@chakra-ui/react";
 
 function UploadComponent({ user, fetchUsersMemes, motdContract }) {
   const [memeName, setMemeName] = useState();
@@ -80,7 +80,7 @@ function UploadComponent({ user, fetchUsersMemes, motdContract }) {
       query.equalTo("owner", user);
       query.find().then(([meme]) => {
         console.log("Meme Item from Moralis", meme);
-        console.log("Meme Name", meme.attributes.name);
+        console.log("Meme Name", meme.attributes.memeName);
         console.log("ETHAddress of MemeOwner", window.ethereum.selectedAddress);
         console.log("userName of MemeOwner", meme.attributes.owner);
         console.log("IPFS of Meme", meme.attributes.ipfs);

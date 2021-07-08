@@ -69,9 +69,11 @@ function ConnectWallet({ setCurrentUser, user }) {
   });
 
   return (
-    <div>
+    <Box align="center">
       {isConnected === false && (
+        <Box p={1} align="center" width="40%" bg="#757b90" style={{borderRadius: "15px"}}>
         <Button onClick={connectUserWallet}>Connect your Wallet</Button>
+        </Box>
       )}
       {isConnected === true && (
         <Box>
@@ -117,7 +119,7 @@ function ConnectWallet({ setCurrentUser, user }) {
           />
         </Alert>
       )}
-    </div>
+    </Box>
   );
 }
 

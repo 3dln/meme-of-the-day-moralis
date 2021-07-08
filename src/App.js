@@ -23,6 +23,7 @@ import ShowMemesLandingPage from "./components/ShowMemesLandingPage";
 import ShowMemesLandingPageLoggedIn from "./components/ShowMemesLandingPageLoggedIn";
 import ConnectWallet from "./components/ConnectWallet";
 import MemeOfTheDay from "./components/MemeOfTheDay";
+import Search from "./components/Search";
 import Moralis from "moralis/lib/browser/Parse";
 
 import { ABI_MOTD_V1 } from "./abis/ABI_MOTDV1";
@@ -115,6 +116,7 @@ function App() {
               <Tab>Meme Of The Day</Tab>
               <Tab>Memes Stream</Tab>
               <Tab>My Memes</Tab>
+              <Tab>Search</Tab>
               <Tab>Create new Meme</Tab>
             </TabList>
             <TabPanels>
@@ -147,6 +149,7 @@ function App() {
                   "Looks like you don't have any Memes yet!"
                 )}
               </TabPanel>
+              <TabPanel><Search /></TabPanel>
               <TabPanel>
                 {user !== undefined ? (
                   <UploadComponent
@@ -190,6 +193,7 @@ function App() {
             <Tab>All Memes</Tab>
             <Tab>Login</Tab>
             <Tab>Sign Up</Tab>
+            <Tab>Search</Tab>
             <Tab>Queries</Tab>
           </TabList>
           <TabPanels>
@@ -216,8 +220,9 @@ function App() {
             <TabPanel>
               <SignUp />
             </TabPanel>
-
+            <TabPanel>SEARCH</TabPanel>
             <TabPanel>
+              {/* QUERIES */}
               {/* FETCH MEME BY ID */}
               <Box>
                 <Input

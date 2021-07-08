@@ -36,23 +36,23 @@ function MemeOfTheDay() {
   };
 
   return (
-    <Box>
+    <Box align="center">
       {ranking && ranking.length > 0 ?
-      <Text fontSize="3xl">Meme of the day 24 hours ranking</Text> : "There are no memes "
+      <Box bg="#264653" mb={4} p={1} style={{borderRadius: "15px"}}>
+      <Text fontSize="3xl">Meme of the Day charts 24 hours</Text></Box> : "There are no memes "
     }
       {ranking
         ? ranking.map((ranking, i) => (
-            <Box mb={4}>
+            <Box mb={4} pb={4} align="center" bg="#2a9d8f" style={{borderRadius: "15px"}}>
+              <Box bg= "#1d3557" width="50%" style={{borderRadius: "0 0 15px 15px"}}>
               <Text fontSize="3xl">
                 {"Rank " +
-                  i +
-                  " " +
-                  ranking.memeName +
-                  " with " +
-                  ranking.voters.length +
-                  " votes in the last 24 hours"}
+                  (i+1)}</Text><Text>{"Title: " + 
+                  ranking.memeName}</Text><Text>{"Votes: " +
+                  ranking.voters.length}
               </Text>
-              <img src={ranking.file._url} alt={ranking.memeName} />
+              </Box>
+              <Image p={4} src={ranking.file._url} alt={ranking.memeName} style={{borderRadius: "30px" }} />
             </Box>
           ))
         : ""}

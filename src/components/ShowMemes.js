@@ -8,7 +8,7 @@ function ShowMemes({ results, fetchUsersMemes }) {
     <Box>
       <Text key={`Title` + meme.id}>
         <strong>Title: </strong>
-        {meme.attributes.name}
+        {meme.attributes.memeName}
       </Text>
       <Text key={`Description` + meme.id}>
         <strong>Description: </strong>
