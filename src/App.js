@@ -25,6 +25,8 @@ import ConnectWallet from "./components/ConnectWallet";
 import MemeOfTheDay from "./components/MemeOfTheDay";
 import Moralis from "moralis/lib/browser/Parse";
 
+import { ABI_MOTD_V1 } from "./abis/ABI_MOTDV1";
+
 function App() {
   const { isAuthenticated, authError, isInitialized } = useMoralis();
   const [user, setUser] = useState();
@@ -34,16 +36,33 @@ function App() {
   const [fetchId, setFetchId] = useState("");
   const [limit, setLimit] = useState("");
   const [sort, setSort] = useState("");
-  // const [ranking, setRanking] = useState();
+  const [motdContract, setMotdContract] = useState();
+  const motdContractAddress = "0xf8686dd0Fef2108D50bA340C6a48b830Eee67c59";
+  const [totalMinted, setTotalMinted] = useState();
 
-  useEffect(() => {
+  useEffect(async () => {
     if (window.ethereum) {
       setHasWeb3(true);
+      const web3 = await Moralis.Web3.enable();
+      const motdInstance = new web3.eth.Contract(
+        ABI_MOTD_V1,
+        motdContractAddress
+      );
+      console.log(motdInstance);
+      setMotdContract(motdInstance);
+      fetchContractData();
     }
     if (!window.ethereum) {
       setHasWeb3(false);
     }
   }, []);
+
+  const fetchContractData = async () => {
+    let result = await Moralis.Cloud.run("fetchAllMemes");
+    let memeCount = result.length;
+    setTotalMinted(memeCount);
+   
+  };
 
   //Fetches and sets current User from Moralis session
   const setCurrentUser = async () => {
@@ -91,7 +110,7 @@ function App() {
             </Button>
           )}
 
-          <Tabs isLazy defaultIndex={1}>
+          <Tabs isLazy defaultIndex={0}>
             <TabList>
               <Tab>Meme Of The Day</Tab>
               <Tab>Memes Stream</Tab>
@@ -133,6 +152,7 @@ function App() {
                   <UploadComponent
                     user={user}
                     fetchUsersMemes={fetchUsersMemes}
+                    motdContract={motdContract}
                   />
                 ) : (
                   "Please connect your wallet to create Memes"
@@ -157,6 +177,9 @@ function App() {
             />
             <Text fontSize="md">on Mumbai Testnet</Text>
           </Heading>
+          {totalMinted !== undefined && (
+            <Text>Total Memes Minted: {totalMinted}</Text>
+          )}
         </Box>
 
         {authError && <AuthError />}

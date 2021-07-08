@@ -3,6 +3,7 @@ import { Box, Image, Text, Heading, Stack, Button } from "@chakra-ui/react";
 import { Moralis } from "moralis";
 
 function ShowMemes({ results, fetchUsersMemes }) {
+  const currentUser = Moralis.User.current();
   const memes = results.map((meme, i) => (
     <Box>
       <Text key={`Title` + meme.id}>
@@ -61,6 +62,20 @@ function ShowMemes({ results, fetchUsersMemes }) {
   return (
     <>
       <Heading>Your Memes:</Heading>
+      <Button
+        onClick={async () => {
+          let memes = await Moralis.Cloud.run("fetchAllMemes");
+          console.log("ALLMEMES", memes);
+          const filteredMemes = memes.filter((meme) => {
+            return meme.voters.find(
+              (currentVoter) => currentVoter.voter === currentUser.id
+            );
+          });
+          console.log("FILTERS", filteredMemes);
+        }}
+      >
+        FetchMyVotes
+      </Button>
       <Stack spacing={7}>{memes}</Stack>
     </>
   );

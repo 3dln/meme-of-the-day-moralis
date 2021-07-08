@@ -16,9 +16,9 @@ function MemeOfTheDay() {
 
   const fetchMemeOfTheDay = async () => {
     let memes = await Moralis.Cloud.run("fetchAllMemes");
-    console.log(memes);
+    // console.log(memes);
     let oneDay = 24 * 60 * 60 * 1000;
-    console.log(oneDay);
+
     let posts = [];
     const filteredMemes = memes.filter((meme) => {
       return meme.voters.find((currentTimestamp) =>
@@ -27,7 +27,7 @@ function MemeOfTheDay() {
           : ""
       );
     });
-    console.log("FM", filteredMemes);
+    // console.log("FM", filteredMemes);
     const highestVotes = filteredMemes.sort((a, b) => {
       return b.voters.length - a.voters.length;
     });
@@ -37,7 +37,9 @@ function MemeOfTheDay() {
 
   return (
     <Box>
-      <Text fontSize="3xl">Meme of the day 24 hours ranking</Text>
+      {ranking && ranking.length > 0 ?
+      <Text fontSize="3xl">Meme of the day 24 hours ranking</Text> : "There are no memes "
+    }
       {ranking
         ? ranking.map((ranking, i) => (
             <Box mb={4}>

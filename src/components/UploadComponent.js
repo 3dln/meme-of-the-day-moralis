@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Moralis } from "moralis";
 import { Box, Button, Input, Textarea, BeatLoader } from "@chakra-ui/react";
 
-function UploadComponent({ user, fetchUsersMemes }) {
+function UploadComponent({ user, fetchUsersMemes, motdContract }) {
   const [memeName, setMemeName] = useState();
   const nameInputRef = React.useRef();
   const [file, setFile] = useState();
@@ -46,6 +46,24 @@ function UploadComponent({ user, fetchUsersMemes }) {
       newMeme.set("votes:", votes);
       newMeme.set("voters", []);
       newMeme.set("metadata", ipfsMetada);
+      await newMeme.save();
+
+      //MINTING MAGIC!
+      await motdContract.methods
+        .mint(hashImage, -1)
+        .send({ from: window.ethereum.selectedAddress })
+        .on("receipt", (receipt) => {
+          console.log(receipt);
+        })
+        .on("error", (error) => {
+          console.error(error.message);
+        });
+
+      //save to moralis
+      let tokenId = await motdContract.methods.getTokenID(hashImage).call();
+      console.log("TokenID", tokenId);
+
+      newMeme.set("tokenId", tokenId);
       await newMeme.save();
 
       //Clean up

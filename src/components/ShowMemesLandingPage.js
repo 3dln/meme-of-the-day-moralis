@@ -33,6 +33,9 @@ function ShowMemesLandingPage({ allMemes, fetchAllMemes }) {
       <Text>
         <strong>Metadata: </strong> {meme.attributes.metadata}
       </Text>
+      <Text>
+        <strong>TokenID: </strong>{" "}
+      </Text>
       <Image
         boxSize="350px"
         src={meme.attributes.ipfs}
