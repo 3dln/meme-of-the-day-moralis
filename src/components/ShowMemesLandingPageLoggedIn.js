@@ -140,14 +140,10 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
 
   return (
     <>
-<<<<<<< HEAD
+
       <Box bg="#1d3557" style={{borderRadius: "15px"}} align="center">
       <Heading>Memes from other users</Heading>
       </Box>
-=======
-      <Heading>Memes from other users hrcek</Heading>
->>>>>>> 3b6bd28f123cc53de03a015610ee8252418f12fd
-    
       <Stack spacing={7}>{memes}</Stack>
     </>
   );
