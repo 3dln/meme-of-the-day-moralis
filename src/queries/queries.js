@@ -225,3 +225,29 @@ const fetchMemeOfTheDay = async () => {
   setRanking();
   setRanking(highestVotes);
 };
+
+//NAME: fetchMemeOfTheDay
+//INPUT: --------------------
+//OUTPUT: returns Memes sort by votecount of past 24hours. highestVotes[0] holds current Meme Of The Day.
+//NOTE: this needs to be inside of the MemeOfTheDay.js Component as it sets state from inside there!
+const fetchMemeOfTheDay = async () => {
+  let memes = await Moralis.Cloud.run("fetchAllMemes");
+  // console.log(memes);
+
+  //Filters out all memes by vote count of last 24hours!
+  let oneDay = 24 * 60 * 60 * 1000;
+  let posts = [];
+  const filteredMemes = memes.filter((meme) => {
+    return meme.voters.find((currentTimestamp) =>
+      currentTimestamp.timestamp >= Date.now() - oneDay ? posts.push(meme) : ""
+    );
+  });
+  // console.log("FM", filteredMemes);
+  const highestVotes = filteredMemes.sort((a, b) => {
+    return b.voters.length - a.voters.length;
+  });
+  //empty State
+  setRanking();
+  //set state with new data
+  setRanking(highestVotes);
+};
