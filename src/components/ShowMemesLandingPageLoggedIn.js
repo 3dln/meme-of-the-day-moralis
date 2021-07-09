@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Box, Image, Text, Input, Heading, Stack, Button } from "@chakra-ui/react";
 import { Moralis } from "moralis";
 
+function renderComments(comments){
+  //return comments.map((item, index) => <Text key={index}>{item.text}</Text>);
+}
+
 function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
   const [memeComment, setMemeComment] = useState();
   const commentInputRef = React.useRef();
@@ -44,11 +48,19 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
         src={meme.attributes.ipfs}
         alt={meme.attributes.name}
       />
-       <Box align="center" width="30%" bg="blue" style={{borderRadius: "15px"}}>
-      <Text>
-        <strong>Votes: </strong>
-        {meme.attributes.votes}
-      </Text>
+      <Box align="center" width="100%" bg="blue" style={{borderRadius: "15px", padding: "30px"}}>
+      {meme.attributes.comments ? ( 
+        <Text>
+          <strong>Comments: </strong>                      
+            {meme.attributes.comments.map(a => a.user+": "+a.comment+"\r")}          
+        </Text>
+        ) : (null) } 
+      </Box>
+      <Box align="center" width="30%" bg="blue" style={{borderRadius: "15px"}}>
+        <Text>
+          <strong>Votes: </strong>
+          {meme.attributes.votes}
+        </Text>
       </Box>
       {!meme.attributes.voters.find(
         (voter) => voter.voter === currentUser.id
