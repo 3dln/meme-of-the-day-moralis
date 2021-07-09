@@ -146,6 +146,7 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
               timestamp: Date.now(),
             });
             await toComment.save();
+            setMemeComment("");
           }}
         >
           Comment
@@ -172,19 +173,12 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
                     <Box>
                       {meme.attributes.comments.map((comment, i) => (
                         <Box
-                          m={1}
-                          p={1}
+                          mb={1}
+                          mt={1}
+                          pb={1}
                           bg="#555"
                           style={{ borderRadius: "15px" }}
                         >
-                          <Box
-                            p={1}
-                            width="90%"
-                            bg="#fff"
-                            style={{ color: "#000", borderRadius: "15px" }}
-                          >
-                            <Text>{meme.attributes.comments[i].comment}</Text>
-                          </Box>
                           <Box
                             bg="#111"
                             width="75%"
@@ -205,6 +199,15 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
                                 meme.attributes.comments[i].timestamp
                               ).toLocaleString()}
                             </Text>
+                          </Box>
+                          <Box
+                            m={1}
+                            p={1}
+                            width="90%"
+                            bg="#fff"
+                            style={{ color: "#000", borderRadius: "15px" }}
+                          >
+                            <Text>{meme.attributes.comments[i].comment}</Text>
                           </Box>
                         </Box>
                       ))}
