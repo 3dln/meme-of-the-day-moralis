@@ -36,6 +36,14 @@ function ShowMemes({ results, fetchUsersMemes }) {
         src={meme.attributes.ipfs}
         alt={meme.attributes.name}
       />
+      <Box align="center" width="100%" bg="blue" style={{borderRadius: "15px", padding: "30px"}}>
+      {meme.attributes.comments ? ( 
+        <Text>
+          <strong>Comments: </strong>                      
+            {meme.attributes.comments.map(a => a.user+": "+a.comment+"\r")}          
+        </Text>
+        ) : (null) } 
+      </Box>
       <Box mt={1} align="center" width="30%" bg="blue" style={{borderRadius: "15px"}}>
       <Text>
         <strong>Votes: </strong>
