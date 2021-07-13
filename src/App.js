@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "tailwindcss/tailwind.css";
 import {
   Container,
   Heading,
@@ -62,7 +63,6 @@ function App() {
     let result = await Moralis.Cloud.run("fetchAllMemes");
     let memeCount = result.length;
     setTotalMinted(memeCount);
-   
   };
 
   //Fetches and sets current User from Moralis session
@@ -77,11 +77,10 @@ function App() {
 
   //fetches Memes of Current User
   const fetchUsersMemes = async () => {
-
-    const currentUser =  Moralis.User.current();
+    const currentUser = Moralis.User.current();
     const results = await Moralis.Cloud.run("fetchMyMemes", {
-      userId: currentUser.id,      
-    });    
+      userId: currentUser.id,
+    });
 
     // alert("Retrieved " + results.length + " memes.");
     if (results !== undefined && results.length > 0) {
@@ -152,7 +151,9 @@ function App() {
                   "Looks like you don't have any Memes yet!"
                 )}
               </TabPanel>
-              <TabPanel><Search /></TabPanel>
+              <TabPanel>
+                <Search />
+              </TabPanel>
               <TabPanel>
                 {user !== undefined ? (
                   <UploadComponent
@@ -172,7 +173,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App bg-gray-500">
       <Container>
         <Box align="center">
           <Heading mb={6}>
@@ -223,7 +224,9 @@ function App() {
             <TabPanel>
               <SignUp />
             </TabPanel>
-            <TabPanel><Search /></TabPanel>
+            <TabPanel>
+              <Search />
+            </TabPanel>
             <TabPanel>
               {/* QUERIES */}
               {/* FETCH MEME BY ID */}
