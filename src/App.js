@@ -26,6 +26,7 @@ import ConnectWallet from "./components/ConnectWallet";
 import MemeOfTheDay from "./components/MemeOfTheDay";
 import Search from "./components/Search";
 import Moralis from "moralis/lib/browser/Parse";
+import MemeCard from "./components/MemeCard";
 
 import { ABI_MOTD_V1 } from "./abis/ABI_MOTDV1";
 
@@ -124,7 +125,9 @@ function App() {
             <TabPanels>
               <TabPanel>
                 {isInitialized ? (
-                  <MemeOfTheDay isInitialized={isInitialized} />
+                  <div>
+                    <MemeOfTheDay isInitialized={isInitialized} />
+                  </div>
                 ) : (
                   "Loading Memes"
                 )}
@@ -202,7 +205,14 @@ function App() {
           </TabList>
           <TabPanels>
             <TabPanel>
-              {isInitialized ? <MemeOfTheDay /> : "Loading... "}
+              {isInitialized ? (
+                <div>
+                  <MemeOfTheDay />
+                  <MemeCard />
+                </div>
+              ) : (
+                "Loading... "
+              )}
             </TabPanel>
             <TabPanel>
               <Text color="red">Login or SignUp to use all features</Text>
