@@ -32,6 +32,7 @@ function App() {
   const { isAuthenticated, authError, isInitialized } = useMoralis();
   const [user, setUser] = useState();
   const [hasWeb3, setHasWeb3] = useState();
+  const [web3JS, setWeb3JS] = useState();
   const [results, setResults] = useState([]);
   const [allMemes, setAllMemes] = useState([]);
   const [fetchId, setFetchId] = useState("");
@@ -45,6 +46,7 @@ function App() {
     if (window.ethereum) {
       setHasWeb3(true);
       const web3 = await Moralis.Web3.enable();
+      setWeb3JS(web3);
       const motdInstance = new web3.eth.Contract(
         ABI_MOTD_V1,
         motdContractAddress
@@ -62,7 +64,6 @@ function App() {
     let result = await Moralis.Cloud.run("fetchAllMemes");
     let memeCount = result.length;
     setTotalMinted(memeCount);
-   
   };
 
   //Fetches and sets current User from Moralis session
@@ -77,11 +78,10 @@ function App() {
 
   //fetches Memes of Current User
   const fetchUsersMemes = async () => {
-
-    const currentUser =  Moralis.User.current();
+    const currentUser = Moralis.User.current();
     const results = await Moralis.Cloud.run("fetchMyMemes", {
-      userId: currentUser.id,      
-    });    
+      userId: currentUser.id,
+    });
 
     // alert("Retrieved " + results.length + " memes.");
     if (results !== undefined && results.length > 0) {
@@ -147,12 +147,15 @@ function App() {
                   <ShowMemes
                     fetchUsersMemes={fetchUsersMemes}
                     results={results}
+                    web3JS={web3JS}
                   />
                 ) : (
                   "Looks like you don't have any Memes yet!"
                 )}
               </TabPanel>
-              <TabPanel><Search /></TabPanel>
+              <TabPanel>
+                <Search />
+              </TabPanel>
               <TabPanel>
                 {user !== undefined ? (
                   <UploadComponent
@@ -223,7 +226,9 @@ function App() {
             <TabPanel>
               <SignUp />
             </TabPanel>
-            <TabPanel><Search /></TabPanel>
+            <TabPanel>
+              <Search />
+            </TabPanel>
             <TabPanel>
               {/* QUERIES */}
               {/* FETCH MEME BY ID */}

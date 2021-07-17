@@ -46,6 +46,12 @@ function UploadComponent({ user, fetchUsersMemes, motdContract }) {
       newMeme.set("votes:", votes);
       newMeme.set("voters", []);
       newMeme.set("metadata", ipfsMetada);
+      newMeme.set("isOnSale", false);
+      newMeme.set("signature", "");
+      newMeme.set("price", 0);
+      newMeme.set("v", "");
+      newMeme.set("r", "");
+      newMeme.set("s", "");
       await newMeme.save();
 
       //MINTING MAGIC!
@@ -115,16 +121,12 @@ function UploadComponent({ user, fetchUsersMemes, motdContract }) {
         }}
         ref={fileInputRef}
       ></Input>
-      {isUploading === false && <Button onClick={handleUpload}>Create Meme</Button>}
-    
+      {isUploading === false && (
+        <Button onClick={handleUpload}>Create Meme</Button>
+      )}
 
       {isUploading === true && (
-        <Button
-          isLoading
-          loadingText="...creating Meme"
-          colorScheme="blue"
-         />
-        
+        <Button isLoading loadingText="...creating Meme" colorScheme="blue" />
       )}
     </Box>
   );

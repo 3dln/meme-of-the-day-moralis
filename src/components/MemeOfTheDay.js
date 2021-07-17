@@ -71,6 +71,12 @@ function MemeOfTheDay() {
                 alt={ranking.memeName}
                 style={{ borderRadius: "30px" }}
               />
+              {ranking.isOnSale === true && (
+                <Box>
+                  <Text>On Sale!</Text>
+                  <Text>Price: {ranking.price} MATIC</Text>
+                </Box>
+              )}
             </Box>
           ))
         : ""}

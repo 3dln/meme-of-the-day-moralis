@@ -10,6 +10,8 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "eth-sig-util": "^3.0.1",
+    "ethers": "^5.4.1",
     "framer-motion": "^4.1.17",
     "moralis": "^0.0.21",
     "react": "^17.0.2",
