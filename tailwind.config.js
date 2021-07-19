@@ -4,7 +4,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#40FFFD",
+        motdoffwhite: "#F9F9F9",
+        motdgrey: "#A0A0A0",
+        motdblack: "#000000",
+        motdblue: "#40FFFD",
+        motdgreen: "#2AFD64",
+        motdyellow: "#FFFB4E",
+        motdorange: "#FD7822",
+        motdred: "#FF0000",
+        motdpink: "#FD22D2",
       },
       fontFamily: {
         anton: ["Anton", "sans-serif"],
