@@ -27,6 +27,7 @@ import MemeOfTheDay from "./components/MemeOfTheDay";
 import Search from "./components/Search";
 import Moralis from "moralis/lib/browser/Parse";
 import MemeCard from "./components/MemeCard";
+import Footer from "./components/Footer";
 
 import { ABI_MOTD_V1 } from "./abis/ABI_MOTDV1";
 
@@ -415,6 +416,7 @@ function App() {
             </TabPanel>
           </TabPanels>
         </Tabs>
+        <Footer></Footer>
       </Container>
     </div>
   );
