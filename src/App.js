@@ -27,6 +27,7 @@ import Search from "./components/Search";
 import Moralis from "moralis/lib/browser/Parse";
 
 import { ABI_MOTD_V1 } from "./abis/ABI_MOTDV1";
+import { ABI_MEMESALE_V1 } from "./abis/ABI_MEMESALEV1";
 
 function App() {
   const { isAuthenticated, authError, isInitialized } = useMoralis();
@@ -38,8 +39,12 @@ function App() {
   const [fetchId, setFetchId] = useState("");
   const [limit, setLimit] = useState("");
   const [sort, setSort] = useState("");
+
+  const motdContractAddress = "0xF7F0B02f9786c7a19cd2Ea646DdA33E18fa4AAc8";
   const [motdContract, setMotdContract] = useState();
-  const motdContractAddress = "0xf8686dd0Fef2108D50bA340C6a48b830Eee67c59";
+  const memeSaleContractAddress = "0xd329a5DD0F112Ade06a60468027C4b8614e00Cb4";
+  const [memeSaleContract, setMemeSaleContract] = useState();
+
   const [totalMinted, setTotalMinted] = useState();
 
   useEffect(async () => {
@@ -47,12 +52,23 @@ function App() {
       setHasWeb3(true);
       const web3 = await Moralis.Web3.enable();
       setWeb3JS(web3);
+
+      //Creates MOTD Contract Instance
       const motdInstance = new web3.eth.Contract(
         ABI_MOTD_V1,
         motdContractAddress
       );
       console.log(motdInstance);
       setMotdContract(motdInstance);
+
+      //Creates MEMESALE Contract instance
+      const memeSaleInstance = new web3.eth.Contract(
+        ABI_MEMESALE_V1,
+        memeSaleContractAddress
+      );
+      console.log(memeSaleInstance);
+      setMemeSaleContract(memeSaleInstance);
+
       fetchContractData();
     }
     if (!window.ethereum) {
@@ -148,6 +164,7 @@ function App() {
                     fetchUsersMemes={fetchUsersMemes}
                     results={results}
                     web3JS={web3JS}
+                    memeSaleContract={memeSaleContract}
                   />
                 ) : (
                   "Looks like you don't have any Memes yet!"

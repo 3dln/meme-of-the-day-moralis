@@ -1,3 +1,13 @@
+This are the proxy addresses on Mumbai:
+
+MemeOfTheDayV4Pause:  0xF7F0B02f9786c7a19cd2Ea646DdA33E18fa4AAc8
+MOTDTreasuryV4Pause:   0xd2f9b150021DA815F3dC927Bb85A5ec937D2944C
+MOTDSaleParametersProviderV4Pause: 0x0aD759D71F696c8aE66eEAB92cb3a2822F8c3142
+MemeSaleV4PauseReentrancy:   0xd329a5DD0F112Ade06a60468027C4b8614e00Cb4
+
+
+This are the latest implementation contracts on Mumbai:
+
 MemeOfTheDayV4Pause:  0xf8686dd0Fef2108D50bA340C6a48b830Eee67c59
 MOTDTreasuryV4Pause:   0xDD331aCB7a73deD7599eacf538f3F5E68b6d1d1F
 MOTDSaleParametersProviderV4Pause: 0x3E8D19B23E36144e4a6024917A641ec1E3C59510

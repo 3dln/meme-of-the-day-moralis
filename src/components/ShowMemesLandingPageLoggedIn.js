@@ -77,6 +77,7 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
           {meme.attributes.votes}
         </Text>
       </Box>
+      {/* VOTING SECTION */}
       {!meme.attributes.voters.find(
         (voter) => voter.voter === currentUser.id
       ) ? (
@@ -128,6 +129,7 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
           Unvote
         </Button>
       )}
+      {/* WRITE COMMENT */}
       <Box>
         <Input
           placeholder="Comment"
@@ -152,6 +154,7 @@ function ShowMemesLandingPageLoggedIn({ allMemes, fetchAllMemes }) {
           Comment
         </Button>
       </Box>
+      {/* SHOW COMMENTS */}
       {meme.attributes.comments !== undefined &&
         meme.attributes.comments.length > 0 && (
           <Box>

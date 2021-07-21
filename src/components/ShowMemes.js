@@ -12,7 +12,7 @@ import {
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Moralis } from "moralis";
 
-function ShowMemes({ results, fetchUsersMemes, web3JS }) {
+function ShowMemes({ results, fetchUsersMemes, web3JS, memeSaleContract }) {
   const [price, setPrice] = useState();
 
   const currentUser = Moralis.User.current();
@@ -137,7 +137,7 @@ function ShowMemes({ results, fetchUsersMemes, web3JS }) {
               let s;
               let v;
               let message = meme.id + price;
-              console.log(message);
+              // console.log(message);
               try {
                 signature = await web3JS.eth.personal.sign(
                   message,
@@ -150,8 +150,6 @@ function ShowMemes({ results, fetchUsersMemes, web3JS }) {
                 const query = new Moralis.Query(Memes);
                 const toUpdate = await query.get(meme.id);
 
-                await toUpdate.set("isOnSale", true);
-                await toUpdate.save();
                 await toUpdate.set("signature", signature);
                 await toUpdate.save();
                 await toUpdate.set("price", parseFloat(price));
@@ -162,21 +160,38 @@ function ShowMemes({ results, fetchUsersMemes, web3JS }) {
                 await toUpdate.save();
                 await toUpdate.set("s", s);
                 await toUpdate.save();
+                await toUpdate.set("isOnSale", true);
+                await toUpdate.save();
+
+                const tokenId = toUpdate.attributes.tokenId;
+                console.log(tokenId);
+                let res;
+                try {
+                  res = await memeSaleContract.methods
+                    .putOnSale(tokenId)
+                    .send({ from: window.ethereum.selectedAddress });
+                  console.log(res);
+                } catch (error) {
+                  alert(
+                    "There has been an error, please check console for more information!"
+                  );
+                  console.error(error);
+                  console.log(res);
+                }
 
                 setPrice();
-                // console.log(toUpdate);
-                console.log("SIGNATURE", signature);
-                console.log("price", price);
-                console.log("r", r);
-                console.log("s", s);
-                console.log("v", v);
+                // console.log("SIGNATURE", signature);
+                // console.log("price", price);
+                // console.log("r", r);
+                // console.log("s", s);
+                // console.log("v", v);
               } catch (error) {
                 console.error(error);
               }
-              console.log(signature);
+              // console.log(signature);
               // console.log(
               //   "Signed by: ",
-              //   await web3JS.eth.accounts.recover(price, signature)
+              //   await web3JS.eth.accounts.recover(message, signature)
               // );
             }}
           >
@@ -194,8 +209,6 @@ function ShowMemes({ results, fetchUsersMemes, web3JS }) {
                 const query = new Moralis.Query(Memes);
                 const toUpdate = await query.get(meme.id);
 
-                toUpdate.set("isOnSale", false);
-                toUpdate.save();
                 toUpdate.set("signature", "");
                 toUpdate.save();
                 toUpdate.set("price", 0);
@@ -206,6 +219,18 @@ function ShowMemes({ results, fetchUsersMemes, web3JS }) {
                 toUpdate.save();
                 toUpdate.set("v", "");
                 toUpdate.save();
+                toUpdate.set("isOnSale", false);
+                toUpdate.save();
+
+                const tokenId = toUpdate.attributes.tokenId;
+                try {
+                  let res = await memeSaleContract.methods
+                    .removeFromSale(tokenId)
+                    .send({ from: window.ethereum.selectedAddress });
+                  console.log(res);
+                } catch (error) {
+                  console.error(error);
+                }
               } catch (error) {
                 alert(
                   "There has been an error, please check console for more information!"
@@ -216,6 +241,82 @@ function ShowMemes({ results, fetchUsersMemes, web3JS }) {
           >
             Remove from Sale
           </Button>
+        </Box>
+      )}
+      {/* CHANGES PRICE */}
+      {meme.attributes.isOnSale === true && (
+        <Box>
+          <Button
+            onClick={async () => {
+              let signature;
+              let r;
+              let s;
+              let v;
+              let message = meme.id + price;
+              // console.log(message);
+              try {
+                signature = await web3JS.eth.personal.sign(
+                  message,
+                  window.ethereum.selectedAddress
+                );
+                r = signature.substring(2).substring(0, 64);
+                s = signature.substring(2).substring(64, 128);
+                v = signature.substring(2).substring(128, 130);
+                const Memes = Moralis.Object.extend("Memes");
+                const query = new Moralis.Query(Memes);
+                const toUpdate = await query.get(meme.id);
+
+                await toUpdate.set("signature", signature);
+                await toUpdate.save();
+                await toUpdate.set("price", parseFloat(price));
+                await toUpdate.save();
+                await toUpdate.set("v", v);
+                await toUpdate.save();
+                await toUpdate.set("r", r);
+                await toUpdate.save();
+                await toUpdate.set("s", s);
+                await toUpdate.save();
+                await toUpdate.set("isOnSale", true);
+                await toUpdate.save();
+
+                setPrice("");
+
+                //SETS PUT ON SALE BOOL IN MEME SALE CONTRACT - NO LONGER NEEDED?
+                // const tokenId = toUpdate.attributes.tokenId;
+                // try {
+                //   let res = await memeSaleContract.methods
+                //     .putOnSale(tokenId)
+                //     .send({ from: window.ethereum.selectedAddress });
+                //   console.log(res);
+                // } catch (error) {
+                //   alert(
+                //     "There has been an error, please check console for more information!"
+                //   );
+                //   console.error(error);
+                // }
+
+                // console.log("SIGNATURE", signature);
+                // console.log("price", price);
+                // console.log("r", r);
+                // console.log("s", s);
+                // console.log("v", v);
+              } catch (error) {
+                console.error(error);
+              }
+              console.log(signature);
+              console.log(
+                "Signed by: ",
+                await web3JS.eth.accounts.recover(message, signature)
+              );
+            }}
+          >
+            Change Price
+          </Button>
+          <Input
+            placeholder="new price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
         </Box>
       )}
     </Box>
@@ -250,7 +351,7 @@ function ShowMemes({ results, fetchUsersMemes, web3JS }) {
               (currentVoter) => currentVoter.voter === currentUser.id
             );
           });
-          console.log("FILTERS", filteredMemes);
+          console.log("MyVotedMemes", filteredMemes);
         }}
       >
         FetchMyVotes
